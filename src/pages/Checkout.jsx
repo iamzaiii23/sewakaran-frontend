@@ -1,20 +1,30 @@
 import { useState } from "react";
 
+import {
+  submitBooking,
+  uploadPaymentProof,
+} from "../services/bookingService";
+
 function Checkout() {
 
-  const [form, setForm] = useState({
-    name: "",
-    phone: "",
-    address: "",
-  });
+  const [form, setForm] =
+    useState({
+      name: "",
+      phone: "",
+      address: "",
+    });
 
-  const [paymentProof, setPaymentProof] = useState(null);
+  const [paymentProof, setPaymentProof] =
+    useState(null);
 
-  const [preview, setPreview] = useState("");
+  const [preview, setPreview] =
+    useState("");
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] =
+    useState(false);
 
-  const [error, setError] = useState("");
+  const [error, setError] =
+    useState("");
 
   const order = {
     product: "Camera Canon EOS",
@@ -25,69 +35,104 @@ function Checkout() {
   const totalPrice =
     order.quantity * order.price;
 
-  // HANDLE INPUT
+  // INPUT
   const handleChange = (e) => {
+
     setForm({
       ...form,
-      [e.target.name]: e.target.value,
+      [e.target.name]:
+        e.target.value,
     });
   };
 
-  // HANDLE IMAGE
+  // IMAGE
   const handleImage = (e) => {
 
-    const file = e.target.files[0];
+    const file =
+      e.target.files[0];
 
     if (file) {
 
       setPaymentProof(file);
 
-      setPreview(URL.createObjectURL(file));
+      setPreview(
+        URL.createObjectURL(file)
+      );
     }
   };
 
-  // HANDLE SUBMIT
-  const handleSubmit = async (e) => {
+  // SUBMIT
+  const handleSubmit =
+    async (e) => {
 
-    e.preventDefault();
+      e.preventDefault();
 
-    setError("");
+      setError("");
 
-    // VALIDATION
-    if (
-      !form.name ||
-      !form.phone ||
-      !form.address
-    ) {
-      return setError("Semua field wajib diisi");
-    }
+      // VALIDATION
+      if (
+        !form.name ||
+        !form.phone ||
+        !form.address
+      ) {
 
-    if (!paymentProof) {
-      return setError(
-        "Upload bukti pembayaran"
-      );
-    }
+        return setError(
+          "Semua field wajib diisi"
+        );
+      }
 
-    try {
+      if (!paymentProof) {
 
-      setLoading(true);
+        return setError(
+          "Upload bukti pembayaran"
+        );
+      }
 
-      // SIMULASI API
-      await new Promise((resolve) =>
-        setTimeout(resolve, 2000)
-      );
+      try {
 
-      alert("Booking berhasil!");
+        setLoading(true);
 
-      setLoading(false);
+        // FORM DATA
+        const formData =
+          new FormData();
 
-    } catch (err) {
+        formData.append(
+          "file",
+          paymentProof
+        );
 
-      setError("Terjadi kesalahan");
+        // UPLOAD IMAGE
+        const uploadResponse =
+          await uploadPaymentProof(
+            formData
+          );
 
-      setLoading(false);
-    }
-  };
+        // SUBMIT BOOKING
+        await submitBooking({
+          ...form,
+          order,
+          totalPrice,
+          paymentProof:
+            uploadResponse.url,
+        });
+
+        setLoading(false);
+
+        // REDIRECT
+        window.location.href =
+          "/booking-status";
+
+      } catch (err) {
+
+        console.log(err);
+
+        setError(
+          "Terjadi kesalahan server"
+        );
+
+        setLoading(false);
+      }
+    };
 
   return (
     <div className="min-h-screen bg-gray-100 py-16">
@@ -98,14 +143,20 @@ function Checkout() {
         <div className="bg-white rounded-3xl shadow-lg p-8">
 
           <h1 className="text-3xl font-bold text-gray-800 mb-8">
+
             Checkout Booking
+
           </h1>
 
           {/* ERROR */}
           {error && (
+
             <div className="bg-red-100 text-red-600 p-4 rounded-xl mb-6">
+
               {error}
+
             </div>
+
           )}
 
           <form
@@ -167,11 +218,13 @@ function Checkout() {
 
             </div>
 
-            {/* PAYMENT */}
+            {/* IMAGE */}
             <div>
 
               <label className="block mb-2 font-medium">
+
                 Upload Bukti Pembayaran
+
               </label>
 
               <input
@@ -186,19 +239,11 @@ function Checkout() {
             {/* PREVIEW */}
             {preview && (
 
-              <div>
-
-                <p className="font-medium mb-3">
-                  Preview Bukti Transfer
-                </p>
-
-                <img
-                  src={preview}
-                  alt="Preview"
-                  className="w-full h-64 object-cover rounded-2xl border"
-                />
-
-              </div>
+              <img
+                src={preview}
+                alt="Preview"
+                className="w-full h-64 object-cover rounded-2xl border"
+              />
 
             )}
 
@@ -223,43 +268,45 @@ function Checkout() {
 
         </div>
 
-        {/* ORDER SUMMARY */}
+        {/* SUMMARY */}
         <div className="bg-white rounded-3xl shadow-lg p-8 h-fit">
 
           <h2 className="text-3xl font-bold text-gray-800 mb-8">
+
             Ringkasan Pesanan
+
           </h2>
 
           <div className="space-y-6">
 
             <div className="flex justify-between">
-              <span className="text-gray-500">
-                Produk
-              </span>
+
+              <span>Produk</span>
 
               <span className="font-semibold">
                 {order.product}
               </span>
+
             </div>
 
             <div className="flex justify-between">
-              <span className="text-gray-500">
-                Quantity
-              </span>
+
+              <span>Quantity</span>
 
               <span className="font-semibold">
                 {order.quantity}
               </span>
+
             </div>
 
             <div className="flex justify-between">
-              <span className="text-gray-500">
-                Harga / Hari
-              </span>
+
+              <span>Harga / Hari</span>
 
               <span className="font-semibold">
                 Rp {order.price.toLocaleString()}
               </span>
+
             </div>
 
             <hr />
@@ -271,7 +318,9 @@ function Checkout() {
               </span>
 
               <span className="text-3xl font-bold text-blue-600">
+
                 Rp {totalPrice.toLocaleString()}
+
               </span>
 
             </div>

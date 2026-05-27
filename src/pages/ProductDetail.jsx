@@ -1,13 +1,18 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+
 import { useState } from "react";
 
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 
+import { useCart } from "../context/CartContext";
+
 function ProductDetail() {
 
   const { id } = useParams();
+
+  const { addToCart } = useCart();
 
   const [quantity, setQuantity] = useState(1);
 
@@ -19,12 +24,25 @@ function ProductDetail() {
     id,
     title: "Camera Canon EOS",
     category: "Elektronik",
-    price: "150.000",
+    price: 150000,
     status: "Tersedia",
     image:
       "https://images.unsplash.com/photo-1516035069371-29a1b244cc32",
     description:
-      "Kamera profesional dengan kualitas tinggi yang cocok untuk fotografi dan videografi.",
+      "Kamera profesional dengan kualitas tinggi untuk fotografi dan videografi.",
+  };
+
+  // ADD TO CART
+  const handleAddToCart = () => {
+
+    addToCart({
+      ...product,
+      quantity,
+      startDate,
+      endDate,
+    });
+
+    alert("Berhasil ditambahkan ke cart");
   };
 
   return (
@@ -76,7 +94,7 @@ function ProductDetail() {
             {/* PRICE */}
             <h2 className="text-4xl font-bold text-blue-600 mt-8">
 
-              Rp {product.price}
+              Rp {product.price.toLocaleString()}
 
               <span className="text-lg text-gray-500 font-normal">
                 {" "} / hari
@@ -170,12 +188,34 @@ function ProductDetail() {
 
             </div>
 
-            {/* BUTTON */}
-            <button className="mt-10 w-full bg-blue-600 text-white py-4 rounded-2xl text-lg font-semibold hover:bg-blue-700 transition">
+            {/* BUTTONS */}
+            <div className="mt-10 flex flex-col md:flex-row gap-4">
 
-              Sewa Sekarang
+              {/* CART */}
+              <button
+                onClick={handleAddToCart}
+                className="w-full bg-yellow-500 text-white py-4 rounded-2xl text-lg font-semibold hover:bg-yellow-600 transition"
+              >
 
-            </button>
+                Tambah ke Cart
+
+              </button>
+
+              {/* CHECKOUT */}
+              <Link
+                to="/checkout"
+                className="w-full"
+              >
+
+                <button className="w-full bg-blue-600 text-white py-4 rounded-2xl text-lg font-semibold hover:bg-blue-700 transition">
+
+                  Sewa Sekarang
+
+                </button>
+
+              </Link>
+
+            </div>
 
           </div>
 

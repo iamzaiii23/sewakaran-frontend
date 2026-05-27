@@ -1,211 +1,170 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Button from "../components/Button";
 import ProductCard from "../components/ProductCard";
+import BundlingCard from "../components/BundlingCard";
 import Footer from "../components/Footer";
 
 function Home() {
 
-  const [search, setSearch] = useState("");
+  const [products, setProducts] =
+    useState([]);
 
-  const [category, setCategory] = useState("Semua");
+  const [loading, setLoading] =
+    useState(true);
 
-  const products = [
-    {
-      id: 1,
-      title: "Camera Canon",
-      category: "Elektronik",
-      price: "150.000",
-      status: "Tersedia",
-      image:
-        "https://images.unsplash.com/photo-1516035069371-29a1b244cc32",
-    },
+  const [error, setError] =
+    useState("");
 
-    {
-      id: 2,
-      title: "Laptop Gaming",
-      category: "Gaming",
-      price: "250.000",
-      status: "Disewa",
-      image:
-        "https://images.unsplash.com/photo-1496181133206-80ce9b88a853",
-    },
+  // FETCH PRODUCTS
+  useEffect(() => {
 
-    {
-      id: 3,
-      title: "Drone DJI",
-      category: "Fotografi",
-      price: "300.000",
-      status: "Tersedia",
-      image:
-        "https://images.unsplash.com/photo-1473968512647-3e447244af8f",
-    },
-  ];
+    const fetchProducts = async () => {
 
-  const filteredProducts = products.filter((product) => {
+      try {
 
-    const matchSearch = product.title
-      .toLowerCase()
-      .includes(search.toLowerCase());
+        // DUMMY DATA
+        const dummyProducts = [
+          {
+            id: 1,
+            title: "Camera Canon EOS",
+            price: 150000,
+            image:
+              "https://images.unsplash.com/photo-1516035069371-29a1b244cc32",
+            status: "Tersedia",
+          },
+          {
+            id: 2,
+            title: "Laptop Gaming",
+            price: 250000,
+            image:
+              "https://images.unsplash.com/photo-1517336714739-489689fd1ca8",
+            status: "Disewa",
+          },
+          {
+            id: 3,
+            title: "Drone DJI",
+            price: 300000,
+            image:
+              "https://images.unsplash.com/photo-1473968512647-3e447244af8f",
+            status: "Tersedia",
+          },
+        ];
 
-    const matchCategory =
-      category === "Semua" ||
-      product.category === category;
+        setProducts(dummyProducts);
 
-    return matchSearch && matchCategory;
-  });
+      } catch (err) {
+
+        console.log(err);
+
+        setError(
+          "Gagal mengambil data produk"
+        );
+
+      } finally {
+
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+
+  }, []);
 
   return (
-    <div>
+    <div className="bg-gray-100 min-h-screen">
 
       {/* HERO SECTION */}
-      <section className="min-h-screen bg-gradient-to-b from-gray-100 to-white flex items-center">
-        <div className="max-w-7xl mx-auto px-6 md:px-8 py-20 grid md:grid-cols-2 gap-16 items-center">
+      <section className="min-h-screen flex items-center">
 
-          {/* LEFT CONTENT */}
+        <div className="max-w-7xl mx-auto px-6 md:px-8 grid md:grid-cols-2 gap-10 items-center">
+
+          {/* LEFT */}
           <div>
-            <p className="text-blue-600 font-semibold mb-4">
-              Platform Rental Barang Modern
-            </p>
 
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-800 leading-tight">
+            <h1 className="text-5xl md:text-6xl font-bold text-gray-800 leading-tight">
+
               Sewa Barang Jadi
               <span className="text-blue-600">
                 {" "}Lebih Mudah
               </span>
+
             </h1>
 
-            <p className="mt-6 text-lg text-gray-600 leading-relaxed">
-              Sewakaran membantu kamu menyewa berbagai barang kebutuhan harian,
-              elektronik, dan perlengkapan lainnya dengan cepat, aman,
-              dan terpercaya.
+            <p className="mt-6 text-lg text-gray-600">
+
+              Sewakaran membantu kamu menyewa berbagai barang kebutuhan harian dengan cepat, aman, dan terpercaya.
+
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-4">
+            <div className="mt-8 flex gap-4 flex-wrap">
+
               <Button text="Sewa Sekarang" />
 
               <button className="border border-blue-600 text-blue-600 px-6 py-3 rounded-xl hover:bg-blue-600 hover:text-white transition">
+
                 Lihat Katalog
+
               </button>
-            </div>
-
-            {/* STATS */}
-            <div className="mt-12 flex flex-wrap gap-8">
-
-              <div>
-                <h2 className="text-3xl font-bold text-gray-800">
-                  500+
-                </h2>
-
-                <p className="text-gray-500">
-                  Barang Tersedia
-                </p>
-              </div>
-
-              <div>
-                <h2 className="text-3xl font-bold text-gray-800">
-                  1K+
-                </h2>
-
-                <p className="text-gray-500">
-                  Penyewa Aktif
-                </p>
-              </div>
-
-              <div>
-                <h2 className="text-3xl font-bold text-gray-800">
-                  24/7
-                </h2>
-
-                <p className="text-gray-500">
-                  Support
-                </p>
-              </div>
 
             </div>
+
           </div>
 
-          {/* RIGHT CONTENT */}
+          {/* RIGHT */}
           <div className="flex justify-center">
+
             <img
-              src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a"
+              src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32"
               alt="Rental"
-              className="rounded-3xl shadow-2xl w-full max-w-xl object-cover"
+              className="rounded-3xl shadow-2xl w-full max-w-lg"
             />
+
           </div>
 
         </div>
+
       </section>
 
       {/* KATALOG */}
-      <section className="py-20 bg-white">
+      <section className="py-20">
+
         <div className="max-w-7xl mx-auto px-6 md:px-8">
 
-          {/* HEADING */}
-          <div className="text-center mb-12">
+          <div className="flex justify-between items-center mb-10">
 
             <h2 className="text-4xl font-bold text-gray-800">
               Katalog Barang
             </h2>
 
-            <p className="text-gray-500 mt-4">
-              Temukan berbagai barang terbaik untuk disewa
-            </p>
-
           </div>
 
-          {/* FILTER */}
-          <div className="flex flex-col md:flex-row gap-4 justify-between items-center mb-10">
+          {/* LOADING */}
+          {loading && (
 
-            {/* SEARCH */}
-            <input
-              type="text"
-              placeholder="Cari barang..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full md:w-96 border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <div className="text-center text-xl text-gray-500">
+              Loading...
+            </div>
 
-            {/* CATEGORY */}
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="w-full md:w-60 border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
+          )}
 
-              <option value="Semua">
-                Semua Kategori
-              </option>
+          {/* ERROR */}
+          {error && (
 
-              <option value="Elektronik">
-                Elektronik
-              </option>
+            <div className="bg-red-100 text-red-600 p-4 rounded-xl">
+              {error}
+            </div>
 
-              <option value="Gaming">
-                Gaming
-              </option>
-
-              <option value="Fotografi">
-                Fotografi
-              </option>
-
-            </select>
-
-          </div>
+          )}
 
           {/* PRODUCT GRID */}
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
 
-            {filteredProducts.map((product) => (
+            {products.map((product) => (
 
               <ProductCard
                 key={product.id}
-                id={product.id}
-                image={product.image}
-                title={product.title}
-                price={product.price}
-                category={product.category}
-                status={product.status}
+                product={product}
               />
 
             ))}
@@ -213,105 +172,41 @@ function Home() {
           </div>
 
         </div>
+
       </section>
 
       {/* BUNDLING */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+      <section className="py-20 bg-white">
 
         <div className="max-w-7xl mx-auto px-6 md:px-8">
 
-          <div className="text-center mb-14">
+          <h2 className="text-4xl font-bold text-gray-800 mb-10">
 
-            <h2 className="text-4xl font-bold">
-              Paket Bundling Hemat
-            </h2>
+            Paket Bundling
 
-            <p className="mt-4 text-blue-100">
-              Dapatkan paket sewa lebih murah dan praktis
-            </p>
+          </h2>
 
-          </div>
+          <div className="grid md:grid-cols-2 gap-8">
 
-          <div className="grid md:grid-cols-3 gap-8">
+            <BundlingCard
+              title="Paket Content Creator"
+              price={450000}
+              items={[
+                "Camera Canon",
+                "Tripod",
+                "Lighting",
+              ]}
+            />
 
-            {/* CARD 1 */}
-            <div className="bg-white text-gray-800 rounded-3xl p-8 shadow-xl">
-
-              <h3 className="text-2xl font-bold">
-                Content Creator
-              </h3>
-
-              <p className="mt-4 text-gray-500">
-                Kamera + Tripod + Lighting
-              </p>
-
-              <h2 className="text-4xl font-bold text-blue-600 mt-6">
-                Rp 350K
-              </h2>
-
-              <p className="text-sm text-gray-400">
-                / hari
-              </p>
-
-              <button className="mt-8 w-full bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition">
-                Ambil Paket
-              </button>
-
-            </div>
-
-            {/* CARD 2 */}
-            <div className="bg-yellow-400 text-gray-800 rounded-3xl p-8 shadow-2xl scale-105">
-
-              <p className="bg-white inline-block px-3 py-1 rounded-full text-sm font-semibold mb-4">
-                Paling Populer
-              </p>
-
-              <h3 className="text-2xl font-bold">
-                Gaming Setup
-              </h3>
-
-              <p className="mt-4 text-gray-700">
-                Laptop Gaming + Headset + Mouse
-              </p>
-
-              <h2 className="text-4xl font-bold mt-6">
-                Rp 500K
-              </h2>
-
-              <p className="text-sm text-gray-700">
-                / hari
-              </p>
-
-              <button className="mt-8 w-full bg-gray-900 text-white py-3 rounded-xl hover:bg-black transition">
-                Ambil Paket
-              </button>
-
-            </div>
-
-            {/* CARD 3 */}
-            <div className="bg-white text-gray-800 rounded-3xl p-8 shadow-xl">
-
-              <h3 className="text-2xl font-bold">
-                Event Package
-              </h3>
-
-              <p className="mt-4 text-gray-500">
-                Speaker + Mic + Projector
-              </p>
-
-              <h2 className="text-4xl font-bold text-blue-600 mt-6">
-                Rp 700K
-              </h2>
-
-              <p className="text-sm text-gray-400">
-                / hari
-              </p>
-
-              <button className="mt-8 w-full bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition">
-                Ambil Paket
-              </button>
-
-            </div>
+            <BundlingCard
+              title="Paket Gaming"
+              price={600000}
+              items={[
+                "Laptop Gaming",
+                "Mouse Gaming",
+                "Headset",
+              ]}
+            />
 
           </div>
 
