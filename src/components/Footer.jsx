@@ -1,68 +1,106 @@
+import { Link } from "react-router-dom";
+
 function Footer() {
   return (
-    <footer className="bg-gray-900 text-white py-14">
-      <div className="max-w-7xl mx-auto px-6 md:px-8 grid sm:grid-cols-2 md:grid-cols-4 gap-10">
+    <footer className="bg-[#B2B2B2] text-white mt-20">
 
-        {/* BRAND */}
-        <div>
-          <h2 className="text-3xl font-bold text-blue-400">
-            Sewakaran
-          </h2>
+      <div className="max-w-7xl mx-auto px-6 py-12">
 
-          <p className="mt-4 text-gray-400 leading-relaxed">
-            Platform rental barang modern yang membantu
-            kamu menyewa berbagai kebutuhan dengan mudah
-            dan terpercaya.
+        <div className="grid md:grid-cols-3 gap-10">
+
+          {/* BRAND */}
+          <div>
+
+            <h2 className="text-3xl font-bold mb-4">
+              Sewakaran
+            </h2>
+
+            <p className="text-gray-100 leading-relaxed">
+              Platform penyewaan barang yang membantu
+              pengguna menemukan berbagai kebutuhan
+              dengan cepat, aman, dan terpercaya.
+            </p>
+
+          </div>
+
+          {/* MENU */}
+          <div>
+
+            <h3 className="text-xl font-semibold mb-4">
+              Navigasi
+            </h3>
+
+            <ul className="space-y-3">
+
+              <li>
+                <Link
+                  to="/"
+                  className="hover:text-gray-200 transition"
+                >
+                  Home
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  to="/about"
+                  className="hover:text-gray-200 transition"
+                >
+                  About
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  to="/booking-status"
+                  className="hover:text-gray-200 transition"
+                >
+                  Booking Status
+                </Link>
+              </li>
+
+            </ul>
+
+          </div>
+
+          {/* CONTACT */}
+          <div>
+
+            <h3 className="text-xl font-semibold mb-4">
+              Kontak
+            </h3>
+
+            <div className="space-y-2">
+
+              <p>
+                📧 admin@sewakaran.com
+              </p>
+
+              <p>
+                📞 0812-3456-7890
+              </p>
+
+              <p>
+                📍 Magelang, Jawa Tengah
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        {/* COPYRIGHT */}
+        <div className="border-t border-gray-300 mt-10 pt-6 text-center">
+
+          <p className="text-sm">
+            © 2026 Sewakaran. All Rights Reserved.
           </p>
-        </div>
 
-        {/* MENU */}
-        <div>
-          <h3 className="text-xl font-semibold mb-4">
-            Menu
-          </h3>
-
-          <ul className="space-y-3 text-gray-400">
-            <li>Home</li>
-            <li>About</li>
-            <li>Katalog</li>
-            <li>Login</li>
-          </ul>
-        </div>
-
-        {/* CATEGORY */}
-        <div>
-          <h3 className="text-xl font-semibold mb-4">
-            Kategori
-          </h3>
-
-          <ul className="space-y-3 text-gray-400">
-            <li>Elektronik</li>
-            <li>Kamera</li>
-            <li>Laptop</li>
-            <li>Event</li>
-          </ul>
-        </div>
-
-        {/* CONTACT */}
-        <div>
-          <h3 className="text-xl font-semibold mb-4">
-            Kontak
-          </h3>
-
-          <ul className="space-y-3 text-gray-400">
-            <li>Email: support@sewakaran.com</li>
-            <li>Phone: +62 812 3456 7890</li>
-            <li>Semarang, Indonesia</li>
-          </ul>
         </div>
 
       </div>
 
-      {/* COPYRIGHT */}
-      <div className="border-t border-gray-800 mt-12 pt-6 text-center text-gray-500">
-        © 2026 Sewakaran. All rights reserved.
-      </div>
     </footer>
   );
 }

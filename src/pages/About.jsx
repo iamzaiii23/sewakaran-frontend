@@ -2,10 +2,10 @@ import Footer from "../components/Footer";
 
 function About() {
   return (
-    <div className="bg-gray-100 min-h-screen">
+    <div className="bg-[#DEDEDE] min-h-screen">
 
       {/* HERO */}
-      <section className="bg-blue-600 text-white py-24">
+      <section className="bg-[#B2B2B2] text-white py-24">
 
         <div className="max-w-5xl mx-auto px-6 text-center">
 
@@ -13,12 +13,12 @@ function About() {
             Tentang Sewakaran
           </h1>
 
-          <p className="text-xl leading-relaxed text-blue-100">
+          <p className="text-xl leading-relaxed text-gray-100">
 
-            Sewakaran adalah platform penyewaan barang modern
-            yang membantu pengguna menemukan dan menyewa
-            berbagai kebutuhan harian dengan mudah,
-            cepat, dan terpercaya.
+            Sewakaran adalah platform penyewaan peralatan acara,
+            audio, komunikasi, dan perlengkapan pendukung lainnya
+            yang membantu pelanggan mendapatkan kebutuhan mereka
+            dengan mudah, cepat, dan terpercaya.
 
           </p>
 
@@ -29,14 +29,14 @@ function About() {
       {/* ABOUT CONTENT */}
       <section className="py-20">
 
-        <div className="max-w-7xl mx-auto px-6 md:px-8 grid md:grid-cols-2 gap-14 items-center">
+        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-center">
 
           {/* IMAGE */}
           <div>
 
             <img
-              src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a"
-              alt="About"
+              src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=900"
+              alt="About Sewakaran"
               className="rounded-3xl shadow-2xl"
             />
 
@@ -47,28 +47,29 @@ function About() {
 
             <h2 className="text-4xl font-bold text-gray-800 mb-6">
 
-              Solusi Rental Barang Masa Kini
+              Solusi Rental Peralatan yang Praktis
 
             </h2>
 
-            <p className="text-gray-600 leading-relaxed mb-6">
+            <p className="text-gray-700 leading-relaxed mb-6">
 
-              Dengan perkembangan teknologi digital,
-              kebutuhan penyewaan barang kini dapat dilakukan
-              secara online tanpa proses yang rumit.
+              Sewakaran hadir untuk membantu kebutuhan penyewaan
+              peralatan acara, komunikasi, dan audio dengan proses
+              yang lebih sederhana dan efisien.
 
-              Sewakaran hadir untuk memberikan pengalaman
-              penyewaan barang yang aman, praktis,
-              dan efisien bagi semua pengguna.
+              Pelanggan dapat melihat katalog, melakukan booking,
+              mengunggah bukti pembayaran, dan memantau status
+              penyewaan secara online.
 
             </p>
 
-            <p className="text-gray-600 leading-relaxed">
+            <p className="text-gray-700 leading-relaxed">
 
-              Mulai dari kamera, laptop, drone,
-              hingga perlengkapan event,
-              semuanya dapat disewa dengan mudah
-              melalui satu platform.
+              Mulai dari Sound System, Handie Talkie,
+              Tripod, Mic Wireless, Headset, Charger,
+              hingga perlengkapan pendukung acara lainnya,
+              semuanya dapat disewa dengan mudah melalui
+              satu platform.
 
             </p>
 
@@ -81,7 +82,7 @@ function About() {
       {/* FEATURES */}
       <section className="py-20 bg-white">
 
-        <div className="max-w-7xl mx-auto px-6 md:px-8">
+        <div className="max-w-7xl mx-auto px-6">
 
           <div className="text-center mb-16">
 
@@ -102,7 +103,7 @@ function About() {
           <div className="grid md:grid-cols-3 gap-8">
 
             {/* CARD 1 */}
-            <div className="bg-gray-100 p-8 rounded-3xl shadow-md">
+            <div className="bg-[#DEDEDE] p-8 rounded-3xl shadow-md hover:shadow-xl transition">
 
               <div className="text-5xl mb-5">
                 ⚡
@@ -114,17 +115,17 @@ function About() {
 
               </h3>
 
-              <p className="text-gray-600">
+              <p className="text-gray-700">
 
-                Proses booking barang hanya dalam beberapa menit
-                tanpa prosedur yang rumit.
+                Proses pemesanan barang dapat dilakukan
+                secara online hanya dalam beberapa langkah.
 
               </p>
 
             </div>
 
             {/* CARD 2 */}
-            <div className="bg-gray-100 p-8 rounded-3xl shadow-md">
+            <div className="bg-[#DEDEDE] p-8 rounded-3xl shadow-md hover:shadow-xl transition">
 
               <div className="text-5xl mb-5">
                 🔒
@@ -136,17 +137,17 @@ function About() {
 
               </h3>
 
-              <p className="text-gray-600">
+              <p className="text-gray-700">
 
-                Sistem validasi dan pembayaran yang aman
-                membuat transaksi lebih terpercaya.
+                Sistem booking dan pembayaran dirancang
+                agar transaksi lebih aman dan terpercaya.
 
               </p>
 
             </div>
 
             {/* CARD 3 */}
-            <div className="bg-gray-100 p-8 rounded-3xl shadow-md">
+            <div className="bg-[#DEDEDE] p-8 rounded-3xl shadow-md hover:shadow-xl transition">
 
               <div className="text-5xl mb-5">
                 📦
@@ -154,14 +155,14 @@ function About() {
 
               <h3 className="text-2xl font-bold mb-4">
 
-                Banyak Pilihan Barang
+                Peralatan Lengkap
 
               </h3>
 
-              <p className="text-gray-600">
+              <p className="text-gray-700">
 
-                Tersedia berbagai kategori barang
-                sesuai kebutuhan harian maupun profesional.
+                Tersedia berbagai perlengkapan acara,
+                komunikasi, dan audio untuk berbagai kebutuhan.
 
               </p>
 
@@ -174,7 +175,7 @@ function About() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-blue-600 text-white">
+      <section className="py-24 bg-[#B2B2B2] text-white">
 
         <div className="max-w-4xl mx-auto px-6 text-center">
 
@@ -184,14 +185,14 @@ function About() {
 
           </h2>
 
-          <p className="text-xl text-blue-100 mb-10">
+          <p className="text-xl text-gray-100 mb-10">
 
-            Temukan berbagai kebutuhan rental terbaik
-            hanya di Sewakaran.
+            Temukan berbagai kebutuhan peralatan terbaik
+            untuk acara dan aktivitas Anda hanya di Sewakaran.
 
           </p>
 
-          <button className="bg-white text-blue-600 px-8 py-4 rounded-2xl font-semibold hover:bg-gray-100 transition">
+          <button className="bg-white text-gray-800 px-8 py-4 rounded-2xl font-semibold hover:bg-gray-200 transition">
 
             Jelajahi Katalog
 
@@ -201,7 +202,6 @@ function About() {
 
       </section>
 
-      {/* FOOTER */}
       <Footer />
 
     </div>

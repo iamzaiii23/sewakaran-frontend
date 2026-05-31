@@ -5,37 +5,77 @@ function Navbar() {
   const { user, logout } = useAuth();
 
   return (
-    <nav className="bg-blue-600 text-white px-6 md:px-8 py-4 flex justify-between items-center sticky top-0 z-50 shadow-md">
+    <nav className="bg-[#B2B2B2] shadow-md">
 
-      <h1 className="text-2xl font-bold">
-        Sewakaran
-      </h1>
+      <div className="max-w-7xl mx-auto px-6 py-4">
 
-      <div className="flex gap-4 md:gap-6 items-center text-sm md:text-base">
+        <div className="flex justify-between items-center">
 
-        <Link to="/">Home</Link>
-
-        <Link to="/about">About</Link>
-
-        {user && (
-          <Link to="/dashboard">
-            Dashboard
-          </Link>
-        )}
-
-        {!user ? (
-          <Link to="/login">
-            Login
-          </Link>
-        ) : (
-          <button
-            onClick={logout}
-            className="bg-white text-blue-600 px-3 py-2 rounded-lg"
+          {/* LOGO */}
+          <Link
+            to="/"
+            className="text-2xl font-bold text-white"
           >
-            Logout
-          </button>
-        )}
+            Sewakaran
+          </Link>
+
+          {/* MENU */}
+          <div className="flex items-center gap-6">
+
+            <Link
+              to="/"
+              className="text-white hover:text-gray-200 transition"
+            >
+              Home
+            </Link>
+
+            <Link
+              to="/about"
+              className="text-white hover:text-gray-200 transition"
+            >
+              About
+            </Link>
+
+            {user && (
+              <>
+                <Link
+                  to="/dashboard"
+                  className="text-white hover:text-gray-200 transition"
+                >
+                  Dashboard
+                </Link>
+
+                <Link
+                  to="/booking-status"
+                  className="text-white hover:text-gray-200 transition"
+                >
+                  Booking
+                </Link>
+              </>
+            )}
+
+            {!user ? (
+              <Link
+                to="/login"
+                className="bg-white text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-100 transition"
+              >
+                Login
+              </Link>
+            ) : (
+              <button
+                onClick={logout}
+                className="bg-white text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-100 transition"
+              >
+                Logout
+              </button>
+            )}
+
+          </div>
+
+        </div>
+
       </div>
+
     </nav>
   );
 }

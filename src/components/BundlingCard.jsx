@@ -1,62 +1,48 @@
 import { Link } from "react-router-dom";
 
-function BundlingCard({
-  id,
-  title,
-  items,
-  price,
-  image,
-}) {
+function BundlingCard({ bundle }) {
   return (
-    <div className="bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition">
+    <Link to={`/bundling/${bundle.id}`}>
+      <div className="bg-white rounded-3xl shadow-lg p-4 hover:scale-105 transition duration-300">
 
-      {/* IMAGE */}
-      <img
-        src={image}
-        alt={title}
-        className="w-full h-56 object-cover"
-      />
+        <div className="grid grid-cols-2 gap-4 items-center">
 
-      {/* CONTENT */}
-      <div className="p-6">
+          {/* IMAGE */}
+          <div className="flex justify-center">
 
-        <h2 className="text-2xl font-bold text-gray-800">
-          {title}
-        </h2>
+            <img
+              src={bundle.image}
+              alt={bundle.title}
+              className="h-40 object-contain"
+            />
 
-        {/* ITEMS */}
-        <ul className="mt-4 space-y-2 text-gray-600">
+          </div>
 
-          {items.map((item, index) => (
-            <li key={index}>
-              ✅ {item}
-            </li>
-          ))}
+          {/* CONTENT */}
+          <div className="text-center">
 
-        </ul>
+            <h3 className="text-2xl font-semibold text-gray-800">
+              {bundle.title}
+            </h3>
 
-        {/* PRICE */}
-        <h3 className="text-3xl font-bold text-blue-600 mt-6">
-          Rp {price}
-        </h3>
+            <p className="text-gray-700 mt-3">
+              {bundle.description}
+            </p>
 
-        <p className="text-sm text-gray-500">
-          / paket
-        </p>
+            <p className="text-xl font-bold text-gray-800 mt-4">
+              {bundle.memberPrice} / {bundle.normalPrice}
+            </p>
 
-        {/* BUTTON */}
-        <Link to={`/bundling/${id}`}>
+            <button className="mt-4 bg-[#B2B2B2] hover:bg-[#909090] text-white px-5 py-2 rounded-xl transition">
+              Detail
+            </button>
 
-          <button className="mt-6 w-full bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition">
+          </div>
 
-            Lihat Detail
-
-          </button>
-
-        </Link>
+        </div>
 
       </div>
-    </div>
+    </Link>
   );
 }
 

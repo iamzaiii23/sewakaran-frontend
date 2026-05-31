@@ -1,9 +1,9 @@
 function Button({ text }) {
   return (
-    <button className="bg-blue-600 text-white px-4 py-2 rounded-lg">
+    <button className="bg-primary hover:bg-dark text-white px-6 py-3 rounded-2xl transition duration-300 shadow-md">
       {text}
     </button>
-  )
+  );
 }
 
-export default Button
+export default Button;

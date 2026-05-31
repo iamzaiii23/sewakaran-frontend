@@ -1,222 +1,185 @@
 import { useEffect, useState } from "react";
 
-import Button from "../components/Button";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import ProductCard from "../components/ProductCard";
 import BundlingCard from "../components/BundlingCard";
-import Footer from "../components/Footer";
 
 function Home() {
+  const [products, setProducts] = useState([]);
+  const [activeTab, setActiveTab] = useState("barang");
 
-  const [products, setProducts] =
-    useState([]);
+  const bundlings = [
+    {
+      id: 1,
+      title: "Bundle",
+      description: "Sound, Stand, Mic",
+      memberPrice: "30K",
+      normalPrice: "50K",
+      image:
+        "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=500",
+    },
+    {
+      id: 2,
+      title: "Bundle",
+      description: "HT, Earphone, Charger",
+      memberPrice: "10K",
+      normalPrice: "15K",
+      image:
+        "https://images.unsplash.com/photo-1586769852044-692d6e3703f0?w=500",
+    },
+  ];
 
-  const [loading, setLoading] =
-    useState(true);
-
-  const [error, setError] =
-    useState("");
-
-  // FETCH PRODUCTS
   useEffect(() => {
+    const dummyProducts = [
+      {
+        id: 1,
+        title: "Handie Talkie",
+        price: 8000,
+        image:
+          "https://images.unsplash.com/photo-1586769852044-692d6e3703f0?w=500",
+        status: "Tersedia",
+      },
+      {
+        id: 2,
+        title: "Sound System",
+        price: 25000,
+        image:
+          "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=500",
+        status: "Tersedia",
+      },
+      {
+        id: 3,
+        title: "Tripod",
+        price: 8000,
+        image:
+          "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500",
+        status: "Tersedia",
+      },
+      {
+        id: 4,
+        title: "Stand Sound",
+        price: 10000,
+        image:
+          "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=500",
+        status: "Disewa",
+      },
+      {
+        id: 5,
+        title: "Mic Wireless",
+        price: 10000,
+        image:
+          "https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=500",
+        status: "Tersedia",
+      },
+      {
+        id: 6,
+        title: "Headset",
+        price: 3000,
+        image:
+          "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500",
+        status: "Tersedia",
+      },
+      {
+        id: 7,
+        title: "Charger",
+        price: 3000,
+        image:
+          "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=500",
+        status: "Tersedia",
+      },
+    ];
 
-    const fetchProducts = async () => {
-
-      try {
-
-        // DUMMY DATA
-        const dummyProducts = [
-          {
-            id: 1,
-            title: "Camera Canon EOS",
-            price: 150000,
-            image:
-              "https://images.unsplash.com/photo-1516035069371-29a1b244cc32",
-            status: "Tersedia",
-          },
-          {
-            id: 2,
-            title: "Laptop Gaming",
-            price: 250000,
-            image:
-              "https://images.unsplash.com/photo-1517336714739-489689fd1ca8",
-            status: "Disewa",
-          },
-          {
-            id: 3,
-            title: "Drone DJI",
-            price: 300000,
-            image:
-              "https://images.unsplash.com/photo-1473968512647-3e447244af8f",
-            status: "Tersedia",
-          },
-        ];
-
-        setProducts(dummyProducts);
-
-      } catch (err) {
-
-        console.log(err);
-
-        setError(
-          "Gagal mengambil data produk"
-        );
-
-      } finally {
-
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-
+    setProducts(dummyProducts);
   }, []);
 
   return (
-    <div className="bg-gray-100 min-h-screen">
+    <div className="bg-[#DEDEDE] min-h-screen">
+      <Navbar />
 
-      {/* HERO SECTION */}
-      <section className="min-h-screen flex items-center">
+      {/* HERO */}
+      <section className="max-w-7xl mx-auto px-6 py-12">
+        <div className="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div>
+              <h1 className="text-5xl font-bold text-gray-800 mb-4">
+                Sewakaran
+              </h1>
 
-        <div className="max-w-7xl mx-auto px-6 md:px-8 grid md:grid-cols-2 gap-10 items-center">
-
-          {/* LEFT */}
-          <div>
-
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-800 leading-tight">
-
-              Sewa Barang Jadi
-              <span className="text-blue-600">
-                {" "}Lebih Mudah
-              </span>
-
-            </h1>
-
-            <p className="mt-6 text-lg text-gray-600">
-
-              Sewakaran membantu kamu menyewa berbagai barang kebutuhan harian dengan cepat, aman, dan terpercaya.
-
-            </p>
-
-            <div className="mt-8 flex gap-4 flex-wrap">
-
-              <Button text="Sewa Sekarang" />
-
-              <button className="border border-blue-600 text-blue-600 px-6 py-3 rounded-xl hover:bg-blue-600 hover:text-white transition">
-
-                Lihat Katalog
-
-              </button>
-
+              <p className="text-gray-600 text-lg">
+                Sewakaran adalah jasa peminjaman alat untuk acara,
+                kebutuhan dokumentasi, perlengkapan audio,
+                dan berbagai kebutuhan lainnya.
+              </p>
             </div>
 
+            <div className="flex justify-center">
+              <img
+                src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=700"
+                alt="Rental"
+                className="rounded-3xl w-full max-w-md"
+              />
+            </div>
           </div>
-
-          {/* RIGHT */}
-          <div className="flex justify-center">
-
-            <img
-              src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32"
-              alt="Rental"
-              className="rounded-3xl shadow-2xl w-full max-w-lg"
-            />
-
-          </div>
-
         </div>
-
       </section>
 
-      {/* KATALOG */}
-      <section className="py-20">
+      {/* TAB MENU */}
+      <section className="max-w-7xl mx-auto px-6 pb-10">
+        <div className="flex gap-4 justify-center">
+          <button
+            onClick={() => setActiveTab("barang")}
+            className={`px-8 py-3 rounded-2xl font-semibold transition ${
+              activeTab === "barang"
+                ? "bg-[#B2B2B2] text-black"
+                : "bg-white"
+            }`}
+          >
+            Barang
+          </button>
 
-        <div className="max-w-7xl mx-auto px-6 md:px-8">
+          <button
+            onClick={() => setActiveTab("bundling")}
+            className={`px-8 py-3 rounded-2xl font-semibold transition ${
+              activeTab === "bundling"
+                ? "bg-[#B2B2B2] text-black"
+                : "bg-white"
+            }`}
+          >
+            Bundling
+          </button>
+        </div>
+      </section>
 
-          <div className="flex justify-between items-center mb-10">
-
-            <h2 className="text-4xl font-bold text-gray-800">
-              Katalog Barang
-            </h2>
-
-          </div>
-
-          {/* LOADING */}
-          {loading && (
-
-            <div className="text-center text-xl text-gray-500">
-              Loading...
-            </div>
-
-          )}
-
-          {/* ERROR */}
-          {error && (
-
-            <div className="bg-red-100 text-red-600 p-4 rounded-xl">
-              {error}
-            </div>
-
-          )}
-
-          {/* PRODUCT GRID */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-
+      {/* BARANG */}
+      {activeTab === "barang" && (
+        <section className="max-w-7xl mx-auto px-6 pb-20">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {products.map((product) => (
-
               <ProductCard
                 key={product.id}
                 product={product}
               />
-
             ))}
-
           </div>
-
-        </div>
-
-      </section>
+        </section>
+      )}
 
       {/* BUNDLING */}
-      <section className="py-20 bg-white">
-
-        <div className="max-w-7xl mx-auto px-6 md:px-8">
-
-          <h2 className="text-4xl font-bold text-gray-800 mb-10">
-
-            Paket Bundling
-
-          </h2>
-
+      {activeTab === "bundling" && (
+        <section className="max-w-7xl mx-auto px-6 pb-20">
           <div className="grid md:grid-cols-2 gap-8">
-
-            <BundlingCard
-              title="Paket Content Creator"
-              price={450000}
-              items={[
-                "Camera Canon",
-                "Tripod",
-                "Lighting",
-              ]}
-            />
-
-            <BundlingCard
-              title="Paket Gaming"
-              price={600000}
-              items={[
-                "Laptop Gaming",
-                "Mouse Gaming",
-                "Headset",
-              ]}
-            />
-
+            {bundlings.map((bundle) => (
+              <BundlingCard
+                key={bundle.id}
+                bundle={bundle}
+              />
+            ))}
           </div>
+        </section>
+      )}
 
-        </div>
-
-      </section>
-
-      {/* FOOTER */}
       <Footer />
-
     </div>
   );
 }

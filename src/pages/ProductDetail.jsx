@@ -1,225 +1,233 @@
-import { useParams, Link } from "react-router-dom";
-
 import { useState } from "react";
-
-import DatePicker from "react-datepicker";
-
-import "react-datepicker/dist/react-datepicker.css";
-
-import { useCart } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";
+import Calendar from "react-calendar";
 
 function ProductDetail() {
-
-  const { id } = useParams();
-
-  const { addToCart } = useCart();
-
-  const [quantity, setQuantity] = useState(1);
-
-  const [startDate, setStartDate] = useState(new Date());
-
-  const [endDate, setEndDate] = useState(new Date());
+  const navigate = useNavigate();
 
   const product = {
-    id,
-    title: "Camera Canon EOS",
-    category: "Elektronik",
-    price: 150000,
-    status: "Tersedia",
+    id: 1,
+    title: "Earphone HT",
+    price: 3000,
     image:
-      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32",
-    description:
-      "Kamera profesional dengan kualitas tinggi untuk fotografi dan videografi.",
+      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500",
+    status: "Tersedia",
   };
 
-  // ADD TO CART
-  const handleAddToCart = () => {
+  const [qty, setQty] = useState(3);
 
-    addToCart({
-      ...product,
-      quantity,
-      startDate,
-      endDate,
-    });
+  const [startDate, setStartDate] = useState(
+    new Date()
+  );
 
-    alert("Berhasil ditambahkan ke cart");
+  const [endDate, setEndDate] = useState(
+    new Date()
+  );
+
+  const bookedDates = [
+    "2026-06-18",
+    "2026-06-20",
+    "2026-06-25",
+  ];
+
+  const totalPrice = qty * product.price;
+
+  const tileClassName = ({ date }) => {
+    const formatted = date
+      .toISOString()
+      .split("T")[0];
+
+    if (bookedDates.includes(formatted)) {
+      return "bg-red-500 text-white rounded-full";
+    }
+
+    return "text-green-700";
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-16">
+    <div className="min-h-screen bg-[#DEDEDE] py-10 px-4">
 
-      <div className="max-w-7xl mx-auto px-6 md:px-8">
+      <div className="max-w-md mx-auto bg-white rounded-3xl shadow-xl p-6">
 
-        <div className="bg-white rounded-3xl shadow-lg overflow-hidden grid md:grid-cols-2 gap-10 p-8">
+        {/* IMAGE */}
+        <div className="flex justify-center">
 
-          {/* IMAGE */}
+          <img
+            src={product.image}
+            alt={product.title}
+            className="h-40 object-contain"
+          />
+
+        </div>
+
+        {/* TITLE */}
+        <h1 className="text-center text-2xl font-bold mt-4">
+          {product.title}
+        </h1>
+
+        <p className="text-center text-lg text-gray-600">
+          Rp {product.price.toLocaleString("id-ID")}
+        </p>
+
+        {/* SPESIFIKASI */}
+        <div className="mt-5 text-center">
+
+          <button className="bg-[#B2B2B2] text-white px-5 py-2 rounded-xl">
+            Spesifikasi
+          </button>
+
+        </div>
+
+        {/* DETAIL */}
+        <div className="mt-6 grid grid-cols-2 gap-3 text-sm">
+
+          <div>
+            <strong>Frequency Range</strong>
+            <p>UHF 400-438MHz</p>
+          </div>
+
+          <div>
+            <strong>Channel Capacity</strong>
+            <p>16</p>
+          </div>
+
+          <div>
+            <strong>RF Rated Power</strong>
+            <p>2W</p>
+          </div>
+
+          <div>
+            <strong>Battery</strong>
+            <p>1500mAh</p>
+          </div>
+
+          <div>
+            <strong>Operating Voltage</strong>
+            <p>3-7V</p>
+          </div>
+
+        </div>
+
+        {/* KALENDER */}
+        <div className="mt-8">
+
+          <h2 className="font-semibold mb-3 text-center">
+            Tanggal Ketersediaan
+          </h2>
+
+          <Calendar
+            tileClassName={tileClassName}
+          />
+
+        </div>
+
+        {/* LEGEND */}
+        <div className="flex justify-center gap-6 mt-5">
+
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-green-500 rounded-full" />
+            <span className="text-sm">
+              Tersedia
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-red-500 rounded-full" />
+            <span className="text-sm">
+              Disewa
+            </span>
+          </div>
+
+        </div>
+
+        {/* TANGGAL */}
+        <div className="grid grid-cols-2 gap-4 mt-6">
+
           <div>
 
-            <img
-              src={product.image}
-              alt={product.title}
-              className="w-full rounded-2xl object-cover"
+            <label className="text-sm block mb-1">
+              Mulai
+            </label>
+
+            <input
+              type="date"
+              className="w-full border rounded-lg p-2"
+              onChange={(e) =>
+                setStartDate(e.target.value)
+              }
             />
 
           </div>
 
-          {/* CONTENT */}
           <div>
 
-            {/* CATEGORY */}
-            <p className="text-blue-600 font-semibold">
-              {product.category}
-            </p>
+            <label className="text-sm block mb-1">
+              Selesai
+            </label>
 
-            {/* TITLE */}
-            <h1 className="text-4xl font-bold text-gray-800 mt-3">
-              {product.title}
-            </h1>
-
-            {/* STATUS */}
-            <div className="mt-4">
-
-              <span
-                className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                  product.status === "Tersedia"
-                    ? "bg-green-500 text-white"
-                    : "bg-red-500 text-white"
-                }`}
-              >
-                {product.status}
-              </span>
-
-            </div>
-
-            {/* PRICE */}
-            <h2 className="text-4xl font-bold text-blue-600 mt-8">
-
-              Rp {product.price.toLocaleString()}
-
-              <span className="text-lg text-gray-500 font-normal">
-                {" "} / hari
-              </span>
-
-            </h2>
-
-            {/* DESCRIPTION */}
-            <p className="text-gray-600 leading-relaxed mt-8">
-              {product.description}
-            </p>
-
-            {/* QUANTITY */}
-            <div className="mt-8">
-
-              <h3 className="font-semibold mb-4">
-                Jumlah Sewa
-              </h3>
-
-              <div className="flex items-center gap-4">
-
-                {/* MINUS */}
-                <button
-                  onClick={() =>
-                    setQuantity(quantity > 1 ? quantity - 1 : 1)
-                  }
-                  className="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300"
-                >
-                  -
-                </button>
-
-                {/* VALUE */}
-                <span className="text-xl font-bold">
-                  {quantity}
-                </span>
-
-                {/* PLUS */}
-                <button
-                  onClick={() =>
-                    setQuantity(quantity + 1)
-                  }
-                  className="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300"
-                >
-                  +
-                </button>
-
-              </div>
-
-            </div>
-
-            {/* DATE PICKER */}
-            <div className="mt-8">
-
-              <h3 className="font-semibold mb-4">
-                Pilih Tanggal Sewa
-              </h3>
-
-              <div className="grid md:grid-cols-2 gap-4">
-
-                {/* START DATE */}
-                <div>
-
-                  <p className="text-sm text-gray-500 mb-2">
-                    Tanggal Mulai
-                  </p>
-
-                  <DatePicker
-                    selected={startDate}
-                    onChange={(date) => setStartDate(date)}
-                    className="w-full border border-gray-300 p-3 rounded-xl"
-                  />
-
-                </div>
-
-                {/* END DATE */}
-                <div>
-
-                  <p className="text-sm text-gray-500 mb-2">
-                    Tanggal Selesai
-                  </p>
-
-                  <DatePicker
-                    selected={endDate}
-                    onChange={(date) => setEndDate(date)}
-                    className="w-full border border-gray-300 p-3 rounded-xl"
-                  />
-
-                </div>
-
-              </div>
-
-            </div>
-
-            {/* BUTTONS */}
-            <div className="mt-10 flex flex-col md:flex-row gap-4">
-
-              {/* CART */}
-              <button
-                onClick={handleAddToCart}
-                className="w-full bg-yellow-500 text-white py-4 rounded-2xl text-lg font-semibold hover:bg-yellow-600 transition"
-              >
-
-                Tambah ke Cart
-
-              </button>
-
-              {/* CHECKOUT */}
-              <Link
-                to="/checkout"
-                className="w-full"
-              >
-
-                <button className="w-full bg-blue-600 text-white py-4 rounded-2xl text-lg font-semibold hover:bg-blue-700 transition">
-
-                  Sewa Sekarang
-
-                </button>
-
-              </Link>
-
-            </div>
+            <input
+              type="date"
+              className="w-full border rounded-lg p-2"
+              onChange={(e) =>
+                setEndDate(e.target.value)
+              }
+            />
 
           </div>
 
         </div>
+
+        {/* QUANTITY */}
+        <div className="flex justify-between items-center mt-8">
+
+          <div className="flex items-center gap-3">
+
+            <button
+              onClick={() =>
+                setQty(
+                  qty > 1 ? qty - 1 : 1
+                )
+              }
+              className="bg-[#B2B2B2] w-8 h-8 rounded"
+            >
+              -
+            </button>
+
+            <span className="font-semibold">
+              {qty} Unit
+            </span>
+
+            <button
+              onClick={() =>
+                setQty(qty + 1)
+              }
+              className="bg-[#B2B2B2] w-8 h-8 rounded"
+            >
+              +
+            </button>
+
+          </div>
+
+          <div className="font-bold text-lg">
+
+            Rp{" "}
+            {totalPrice.toLocaleString(
+              "id-ID"
+            )}
+
+          </div>
+
+        </div>
+
+        {/* BUTTON */}
+        <button
+          onClick={() =>
+            navigate("/checkout")
+          }
+          className="w-full mt-8 bg-[#B2B2B2] hover:bg-[#909090] text-white py-3 rounded-2xl font-semibold transition"
+        >
+          Booking Sekarang
+        </button>
 
       </div>
 
