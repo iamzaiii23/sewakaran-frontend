@@ -1,327 +1,207 @@
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 function Checkout() {
-  const [formData, setFormData] = useState({
-    nama: "",
-    noHp: "",
-    alamat: "",
-  });
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const [proofImage, setProofImage] =
-    useState(null);
+  const bookingData = location.state;
 
-  const [previewImage, setPreviewImage] =
-    useState(null);
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [paymentProof, setPaymentProof] = useState(null);
+  const [paid, setPaid] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const [loading, setLoading] =
-    useState(false);
+  // fallback jika user akses langsung URL
+  if (!bookingData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center flex-col text-center">
+        <h1 className="text-2xl font-bold text-gray-800">
+          Data booking tidak ditemukan
+        </h1>
 
-  const [error, setError] =
-    useState("");
-
-  const [success, setSuccess] =
-    useState("");
-
-  // Dummy data dari Product Detail
-  const booking = {
-    product: "Earphone HT",
-    quantity: 3,
-    startDate: "2026-06-12",
-    endDate: "2026-06-24",
-    price: 3000,
-  };
-
-  const totalPrice =
-    booking.quantity * booking.price;
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]:
-        e.target.value,
-    });
-  };
-
-  const handleImageChange = (e) => {
-    const file =
-      e.target.files[0];
-
-    if (!file) return;
-
-    setProofImage(file);
-
-    setPreviewImage(
-      URL.createObjectURL(file)
+        <button
+          onClick={() => navigate("/")}
+          className="mt-4 bg-gray-800 text-white px-5 py-2 rounded-xl"
+        >
+          Kembali ke Home
+        </button>
+      </div>
     );
-  };
+  }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const { product, qty, selectedDate, totalPrice } = bookingData;
 
-    setError("");
-    setSuccess("");
-
-    if (
-      !formData.nama ||
-      !formData.noHp ||
-      !formData.alamat
-    ) {
-      setError(
-        "Lengkapi seluruh data terlebih dahulu."
-      );
+  const handleSubmit = () => {
+    // VALIDASI
+    if (!name || !phone) {
+      toast.error("Lengkapi data terlebih dahulu");
       return;
     }
 
-    if (!proofImage) {
-      setError(
-        "Upload bukti pembayaran terlebih dahulu."
-      );
+    if (!paymentProof) {
+      toast.error("Upload bukti transfer terlebih dahulu");
       return;
     }
 
-    try {
-      setLoading(true);
+    setLoading(true);
 
-      // simulasi request API
-      await new Promise(
-        (resolve) =>
-          setTimeout(
-            resolve,
-            2000
-          )
-      );
-
-      setSuccess(
-        "Booking berhasil dikirim."
-      );
-
-      console.log({
-        customer: formData,
-        booking,
-        proofImage,
-      });
-
-    } catch (err) {
-      console.log(err);
-
-      setError(
-        "Terjadi kesalahan saat mengirim booking."
-      );
-    } finally {
+    // simulasi proses pembayaran
+    setTimeout(() => {
       setLoading(false);
-    }
+      setPaid(true);
+
+      toast.success("Booking berhasil!");
+
+      // lanjut ke halaman status
+      navigate("/booking-status", {
+        state: {
+          product,
+          qty,
+          selectedDate,
+          totalPrice,
+          name,
+          phone,
+        },
+      });
+    }, 1200);
   };
 
   return (
     <div className="min-h-screen bg-[#DEDEDE] py-10 px-4">
 
-      <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8">
+      <div className="max-w-md mx-auto">
 
-        {/* FORM */}
-        <div className="bg-white rounded-3xl shadow-lg p-6">
+        {/* HEADER */}
+        <div className="bg-[#B2B2B2] p-4 flex items-center justify-between rounded-t-2xl">
 
-          <h2 className="text-2xl font-bold mb-6">
-            Data Penyewa
-          </h2>
+          <h1 className="text-2xl font-bold">
+            Checkout
+          </h1>
 
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-5"
+          <button
+            onClick={() => navigate(-1)}
+            aria-label="Kembali"
           >
-
-            <div>
-              <label className="block mb-2 font-medium">
-                Nama Lengkap
-              </label>
-
-              <input
-                type="text"
-                name="nama"
-                value={formData.nama}
-                onChange={
-                  handleChange
-                }
-                className="w-full border rounded-xl p-3"
-                placeholder="Masukkan nama"
-              />
-            </div>
-
-            <div>
-              <label className="block mb-2 font-medium">
-                Nomor HP
-              </label>
-
-              <input
-                type="text"
-                name="noHp"
-                value={formData.noHp}
-                onChange={
-                  handleChange
-                }
-                className="w-full border rounded-xl p-3"
-                placeholder="08xxxxxxxxxx"
-              />
-            </div>
-
-            <div>
-              <label className="block mb-2 font-medium">
-                Alamat
-              </label>
-
-              <textarea
-                name="alamat"
-                rows="4"
-                value={
-                  formData.alamat
-                }
-                onChange={
-                  handleChange
-                }
-                className="w-full border rounded-xl p-3"
-                placeholder="Masukkan alamat"
-              />
-            </div>
-
-            {/* Upload */}
-            <div>
-              <label className="block mb-2 font-medium">
-                Bukti Pembayaran
-              </label>
-
-              <input
-                type="file"
-                accept="image/*"
-                onChange={
-                  handleImageChange
-                }
-                className="w-full"
-              />
-            </div>
-
-            {/* Preview */}
-            {previewImage && (
-              <div>
-
-                <p className="font-medium mb-2">
-                  Preview Bukti Transfer
-                </p>
-
-                <img
-                  src={previewImage}
-                  alt="preview"
-                  className="rounded-xl border h-52 object-cover"
-                />
-
-              </div>
-            )}
-
-            {/* Error */}
-            {error && (
-              <div className="bg-red-100 text-red-600 p-3 rounded-xl">
-                {error}
-              </div>
-            )}
-
-            {/* Success */}
-            {success && (
-              <div className="bg-green-100 text-green-600 p-3 rounded-xl">
-                {success}
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-[#B2B2B2] hover:bg-[#8f8f8f] text-white py-3 rounded-xl font-semibold transition"
-            >
-              {loading
-                ? "Mengirim..."
-                : "Konfirmasi Booking"}
-            </button>
-
-          </form>
+            ←
+          </button>
 
         </div>
 
-        {/* RINGKASAN */}
-        <div className="bg-white rounded-3xl shadow-lg p-6 h-fit">
+        <div className="bg-white p-5 rounded-b-2xl">
 
-          <h2 className="text-2xl font-bold mb-6">
-            Ringkasan Pesanan
-          </h2>
+          {/* FORM */}
+          <div className="border p-4 rounded-xl mb-4">
 
-          <div className="space-y-4">
+            <label htmlFor="name" className="font-semibold">
+              Nama *
+            </label>
+
+            <input
+              id="name"
+              type="text"
+              placeholder="Masukkan nama"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full bg-gray-100 p-3 rounded mt-2 mb-4"
+            />
+
+            <label htmlFor="phone" className="font-semibold">
+              Nomor Whatsapp *
+            </label>
+
+            <input
+              id="phone"
+              type="text"
+              placeholder="08xxxxxxxxxx"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="w-full bg-gray-100 p-3 rounded mt-2"
+            />
+
+          </div>
+
+          {/* RINCIAN */}
+          <div className="border p-4 rounded-xl mb-4">
+
+            <h2 className="font-bold mb-4">
+              Rincian Total Harga
+            </h2>
 
             <div className="flex justify-between">
-              <span>Barang</span>
+              <span>{product.title}</span>
+
               <span>
-                {booking.product}
+                Rp {totalPrice.toLocaleString("id-ID")}
               </span>
             </div>
 
-            <div className="flex justify-between">
-              <span>Jumlah</span>
-              <span>
-                {booking.quantity} Unit
-              </span>
-            </div>
+            <p className="mt-2 text-sm text-gray-500">
+              {selectedDate
+                ? new Date(selectedDate).toLocaleDateString("id-ID")
+                : "-"}
+            </p>
 
-            <div className="flex justify-between">
-              <span>Mulai</span>
-              <span>
-                {booking.startDate}
-              </span>
-            </div>
-
-            <div className="flex justify-between">
-              <span>Selesai</span>
-              <span>
-                {booking.endDate}
-              </span>
-            </div>
-
-            <div className="flex justify-between">
-              <span>Harga / Unit</span>
-              <span>
-                Rp{" "}
-                {booking.price.toLocaleString(
-                  "id-ID"
-                )}
-              </span>
-            </div>
-
-            <hr />
-
-            <div className="flex justify-between font-bold text-xl">
-
-              <span>Total</span>
+            <div className="border-t mt-6 pt-4 flex justify-between font-bold">
+              <span>Total Harga</span>
 
               <span>
-                Rp{" "}
-                {totalPrice.toLocaleString(
-                  "id-ID"
-                )}
+                Rp {totalPrice.toLocaleString("id-ID")}
               </span>
-
             </div>
 
           </div>
 
-          <div className="mt-8 bg-[#DEDEDE] p-4 rounded-xl">
+          {/* PAYMENT SECTION */}
+          <div className="border p-4 rounded-xl mb-4">
 
-            <h3 className="font-semibold mb-2">
-              Transfer ke
-            </h3>
+            <h2 className="font-bold mb-4">
+              Bukti Pembayaran
+            </h2>
 
-            <p>
-              BCA 1234567890
-            </p>
+            {!paid && (
+              <>
+                <p className="mb-4 text-sm text-gray-600">
+                  Scan QR untuk melakukan pembayaran
+                </p>
 
-            <p>
-              a.n. Sewakaran
-            </p>
+                <img
+                  src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=SewakanApp"
+                  alt="QR Payment"
+                  className="w-40 mx-auto mb-4"
+                />
+              </>
+            )}
+
+            <input
+              type="file"
+              onChange={(e) =>
+                setPaymentProof(e.target.files[0])
+              }
+            />
+
+            {paymentProof && (
+              <p className="text-green-600 font-semibold mt-3">
+                ✓ Bukti pembayaran terupload
+              </p>
+            )}
 
           </div>
+
+          {/* BUTTON */}
+          <button
+            onClick={handleSubmit}
+            disabled={loading || paid}
+            className="w-full bg-[#B2B2B2] hover:bg-[#8f8f8f] text-white py-3 rounded-xl transition disabled:opacity-50"
+          >
+            {loading
+              ? "Memproses..."
+              : paid
+              ? "Sudah Dibayar"
+              : "Konfirmasi Pembayaran"}
+          </button>
 
         </div>
 

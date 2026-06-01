@@ -2,43 +2,69 @@ import { Link } from "react-router-dom";
 
 function ProductCard({ product }) {
   return (
-    <Link to={`/product/${product.id}`}>
-      <div className="bg-[#DEDEDE] rounded-3xl shadow-lg p-4 hover:scale-105 transition duration-300 cursor-pointer">
+    <div className="bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-xl hover:scale-105 transition duration-300 h-full">
 
-        {/* IMAGE */}
-        <div className="flex justify-center">
-          <img
-            src={product.image}
-            alt={product.title}
-            className="h-40 w-full object-contain"
-          />
+      {/* IMAGE */}
+      <img
+        src={product.image}
+        alt={product.title}
+        className="w-full h-36 md:h-48 object-cover"
+      />
+
+      {/* CONTENT */}
+      <div className="p-4 md:p-5 flex flex-col justify-between h-[220px] md:h-[240px]">
+
+        <div>
+
+          <h2 className="text-lg md:text-xl font-bold text-gray-800 line-clamp-2">
+            {product.title}
+          </h2>
+
+          <div className="mt-3">
+
+            <p className="text-green-700 font-semibold text-sm md:text-base">
+              Member :
+              {product.memberPrice === 0
+                ? " Free"
+                : ` Rp ${product.memberPrice.toLocaleString("id-ID")}`}
+            </p>
+
+            <p className="text-gray-600 text-sm md:text-base">
+              Normal :
+              Rp{" "}
+              {product.normalPrice.toLocaleString("id-ID")}
+            </p>
+
+          </div>
+
+          {/* STATUS */}
+          <div className="mt-4">
+
+            <span
+              className={`px-3 py-1 rounded-full text-xs md:text-sm font-medium ${
+                product.status === "Tersedia"
+                  ? "bg-green-100 text-green-700"
+                  : "bg-red-100 text-red-700"
+              }`}
+            >
+              {product.status}
+            </span>
+
+          </div>
+
         </div>
 
-        {/* TITLE */}
-        <h3 className="text-center text-lg font-semibold text-gray-800 mt-4">
-          {product.title}
-        </h3>
-
-        {/* PRICE */}
-        <p className="text-center text-gray-700 mt-1">
-          Rp {product.price.toLocaleString("id-ID")}
-        </p>
-
-        {/* STATUS */}
-        <div className="flex justify-center mt-3">
-          <span
-            className={`px-3 py-1 rounded-full text-sm font-medium ${
-              product.status === "Tersedia"
-                ? "bg-green-100 text-green-700"
-                : "bg-red-100 text-red-700"
-            }`}
-          >
-            {product.status}
-          </span>
-        </div>
+        {/* BUTTON */}
+        <Link
+          to={`/product/${product.id}`}
+          className="block mt-5 text-center bg-[#B2B2B2] hover:bg-[#8f8f8f] text-white py-3 rounded-2xl transition text-sm md:text-base"
+        >
+          Lihat Detail
+        </Link>
 
       </div>
-    </Link>
+
+    </div>
   );
 }
 

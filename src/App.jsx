@@ -1,7 +1,5 @@
 import { Routes, Route } from "react-router-dom";
 
-import Navbar from "./components/Navbar";
-
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Login from "./pages/Login";
@@ -15,77 +13,58 @@ import BookingStatus from "./pages/BookingStatus";
 
 import AdminDashboard from "./pages/AdminDashboard";
 
-import ProtectedRoute from "./routes/ProtectedRoute";
-
 function App() {
   return (
-    <>
-      {/* NAVBAR */}
-      <Navbar />
+    <Routes>
 
-      {/* ROUTES */}
-      <Routes>
+      {/* USER */}
+      <Route
+        path="/"
+        element={<Home />}
+      />
 
-        {/* HOME */}
-        <Route
-          path="/"
-          element={<Home />}
-        />
+      <Route
+        path="/about"
+        element={<About />}
+      />
 
-        {/* ABOUT */}
-        <Route
-          path="/about"
-          element={<About />}
-        />
+      <Route
+        path="/login"
+        element={<Login />}
+      />
 
-        {/* LOGIN */}
-        <Route
-          path="/login"
-          element={<Login />}
-        />
+      <Route
+        path="/dashboard"
+        element={<Dashboard />}
+      />
 
-        {/* USER DASHBOARD */}
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+      <Route
+        path="/product/:id"
+        element={<ProductDetail />}
+      />
 
-        {/* PRODUCT DETAIL */}
-        <Route
-          path="/product/:id"
-          element={<ProductDetail />}
-        />
+      <Route
+        path="/bundling/:id"
+        element={<BundlingDetail />}
+      />
 
-        {/* BUNDLING DETAIL */}
-        <Route
-          path="/bundling/:id"
-          element={<BundlingDetail />}
-        />
+      <Route
+        path="/checkout"
+        element={<Checkout />}
+      />
 
-        {/* CHECKOUT */}
-        <Route
-          path="/checkout"
-          element={<Checkout />}
-        />
+      <Route
+        path="/booking-status"
+        element={<BookingStatus />}
+      />
 
-        {/* BOOKING STATUS */}
-        <Route
-          path="/booking-status"
-          element={<BookingStatus />}
-        />
+      {/* ADMIN */}
+      <Route
+        path="/admin"
+        element={<AdminDashboard />}
+      />
 
-        {/* ADMIN DASHBOARD */}
-        <Route
-          path="/admin"
-          element={<AdminDashboard />}
-        />
-
-      </Routes>
-    </>
+    </Routes>
   );
 }
 
