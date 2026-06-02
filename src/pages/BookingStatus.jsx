@@ -1,30 +1,20 @@
+import { useBooking } from "../context/BookingContext";
+
 function BookingStatus() {
+  const { bookings } = useBooking();
 
-  const bookings = [
-    {
-      id: 1,
-      product: "Camera Canon EOS",
-      date: "12 Mei 2026",
-      total: 300000,
-      status: "Pending",
-    },
-
-    {
-      id: 2,
-      product: "Drone DJI",
-      date: "10 Mei 2026",
-      total: 500000,
-      status: "Disetujui",
-    },
-
-    {
-      id: 3,
-      product: "Laptop Gaming",
-      date: "5 Mei 2026",
-      total: 250000,
-      status: "Ditolak",
-    },
-  ];
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "Pending":
+        return "bg-yellow-500";
+      case "Disetujui":
+        return "bg-green-500";
+      case "Ditolak":
+        return "bg-red-500";
+      default:
+        return "bg-gray-400";
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 py-16">
@@ -44,63 +34,65 @@ function BookingStatus() {
 
         </div>
 
-        {/* BOOKING LIST */}
-        <div className="space-y-6">
+        {/* EMPTY STATE */}
+        {bookings.length === 0 ? (
+          <div className="text-center text-gray-500 py-20">
+            Belum ada booking
+          </div>
+        ) : (
 
-          {bookings.map((booking) => (
+          <div className="space-y-6">
 
-            <div
-              key={booking.id}
-              className="bg-white rounded-3xl shadow-lg p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6"
-            >
+            {bookings.map((booking) => (
 
-              {/* LEFT */}
-              <div>
+              <div
+                key={booking.id}
+                className="bg-white rounded-3xl shadow-lg p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6"
+              >
 
-                <h2 className="text-2xl font-bold text-gray-800">
-                  {booking.product}
-                </h2>
+                {/* LEFT */}
+                <div>
 
-                <p className="text-gray-500 mt-2">
-                  Tanggal Booking: {booking.date}
-                </p>
+                  <h2 className="text-2xl font-bold text-gray-800">
+                    {booking.product}
+                  </h2>
 
-                <p className="text-blue-600 font-bold text-xl mt-4">
-                  Rp {booking.total.toLocaleString()}
-                </p>
+                  <p className="text-gray-500 mt-2">
+                    Tanggal Booking: {booking.date}
+                  </p>
+
+                  <p className="text-blue-600 font-bold text-xl mt-4">
+                    Rp {booking.total.toLocaleString()}
+                  </p>
+
+                </div>
+
+                {/* RIGHT */}
+                <div className="flex flex-col items-start md:items-end gap-4">
+
+                  <span
+                    className={`px-5 py-2 rounded-full text-white font-semibold ${getStatusColor(
+                      booking.status
+                    )}`}
+                  >
+                    {booking.status}
+                  </span>
+
+                  <button className="border border-blue-600 text-blue-600 px-5 py-2 rounded-xl hover:bg-blue-600 hover:text-white transition">
+
+                    Lihat Detail
+
+                  </button>
+
+                </div>
 
               </div>
 
-              {/* RIGHT */}
-              <div className="flex flex-col items-start md:items-end gap-4">
+            ))}
 
-                {/* STATUS */}
-                <span
-                  className={`px-5 py-2 rounded-full text-white font-semibold ${
-                    booking.status === "Pending"
-                      ? "bg-yellow-500"
-                      : booking.status === "Disetujui"
-                      ? "bg-green-500"
-                      : "bg-red-500"
-                  }`}
-                >
-                  {booking.status}
-                </span>
+          </div>
 
-                {/* DETAIL */}
-                <button className="border border-blue-600 text-blue-600 px-5 py-2 rounded-xl hover:bg-blue-600 hover:text-white transition">
-
-                  Lihat Detail
-
-                </button>
-
-              </div>
-
-            </div>
-
-          ))}
-
-        </div>
+        )}
 
       </div>
 

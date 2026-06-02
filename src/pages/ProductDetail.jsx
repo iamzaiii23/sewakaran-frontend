@@ -3,6 +3,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 
+import handieTalkie from "../assets/handie-talkie.jpeg";
+import soundSystem from "../assets/sound-system.jpeg";
+import tripod from "../assets/tripod.jpeg";
+import stand from "../assets/stand.jpeg";
+import mic from "../assets/mic.jpeg";
+import earphone from "../assets/earphone-ht.jpeg";
+import chargerSystem from "../assets/charger-system.jpeg";
+
 function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -20,41 +28,105 @@ function ProductDetail() {
     {
       id: 1,
       title: "Handie Talkie",
-      memberPrice: 8000,
-      normalPrice: 12000,
-      image:
-        "https://images.unsplash.com/photo-1586769852044-692d6e3703f0?w=500",
+      price12h: 8000,
+      price24h: 12000,
+      image: handieTalkie,
       specifications: [
+        "Frequency Range",
         "UHF 400-438MHz",
-        "RF Power 2W",
-        "Channel 16",
+        "RF Rated Power 2W",
+        "Channel Capacity 16",
+        "Operated Voltage 3.7V",
         "Battery 1500mAh",
       ],
     },
     {
       id: 2,
       title: "Sound System",
-      memberPrice: 25000,
-      normalPrice: 40000,
-      image:
-        "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=500",
+      price12h: 25000,
+      price24h: 40000,
+      image: soundSystem,
       specifications: [
-        "High Power Audio",
-        "Bluetooth Support",
-        "Portable System",
+        "Frequency Range",
+        "UHF 400-438MHz",
+        "RF Rated Power 2W",
+        "Channel Capacity 16",
+        "Operated Voltage 3.7V",
+        "Battery 1500mAh",
       ],
     },
     {
       id: 3,
       title: "Tripod",
-      memberPrice: 8000,
-      normalPrice: 13000,
-      image:
-        "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500",
+      price12h: 8000,
+      price24h: 13000,
+      image: tripod,
       specifications: [
-        "Max Height 136cm",
-        "Aluminium Material",
-        "3-Way Head",
+        "Max Height 136 cm",
+        "Folded Length 52 cm",
+        "Material Aluminium",
+        "3-Way Pan Head",
+        "Quick Release Plate",
+        "Load Capacity 3 kg",
+      ],
+    },
+    {
+      id: 4,
+      title: "Stand",
+      price12h: 10000,
+      price24h: 15000,
+      image: stand,
+      specifications: [
+        "Adjustable Height",
+        "Material Steel Iron",
+        "Tripod Leg Design",
+        "Strong Construction",
+        "Portable",
+      ],
+    },
+    {
+      id: 5,
+      title: "Mic Wireless",
+      price12h: 10000,
+      price24h: 15000,
+      image: mic,
+      specifications: [
+        "Frequency Range",
+        "UHF 400-438MHz",
+        "RF Rated Power 2W",
+        "Channel Capacity 16",
+        "Operated Voltage 3.7V",
+        "Battery 1500mAh",
+      ],
+    },
+    {
+      id: 6,
+      title: "Earphone HT",
+      price12h: 0,
+      price24h: 3000,
+      image: earphone,
+      specifications: [
+        "Frequency Range",
+        "UHF 400-438MHz",
+        "RF Rated Power 2W",
+        "Channel Capacity 16",
+        "Operated Voltage 3.7V",
+        "Battery 1500mAh",
+      ],
+    },
+    {
+      id: 7,
+      title: "Charger System",
+      price12h: 3000,
+      price24h: 5000,
+      image: chargerSystem,
+      specifications: [
+        "Frequency Range",
+        "UHF 400-438MHz",
+        "RF Rated Power 2W",
+        "Channel Capacity 16",
+        "Operated Voltage 3.7V",
+        "Battery 1500mAh",
       ],
     },
   ];
@@ -63,7 +135,6 @@ function ProductDetail() {
     (item) => item.id === Number(id)
   );
 
-  // fallback kalau product tidak ada
   if (!product) {
     return (
       <div className="min-h-screen flex items-center justify-center flex-col">
@@ -81,81 +152,64 @@ function ProductDetail() {
     );
   }
 
-  const totalPrice = qty * product.normalPrice;
+  const totalPrice = qty * product.price24h;
 
   return (
     <div className="min-h-screen bg-[#DEDEDE] py-10 px-4">
-
       <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-lg p-8">
-
         <div className="grid md:grid-cols-2 gap-10">
 
-          {/* IMAGE */}
-          <div>
+          <div className="flex items-center justify-center bg-white rounded-3xl p-6">
             <img
               src={product.image}
-              alt={`Gambar produk ${product.title}`}
-              className="w-full rounded-3xl"
+              alt={product.title}
+              className="max-h-[400px] max-w-full object-contain"
             />
           </div>
 
-          {/* DETAIL */}
           <div>
-
             <h1 className="text-4xl font-bold text-gray-800">
               {product.title}
             </h1>
 
-            {/* PRICE */}
             <div className="mt-4">
-
               <p className="text-green-700 font-bold text-xl">
-                Member:{" "}
-                {product.memberPrice === 0
-                  ? "Free"
-                  : `Rp ${product.memberPrice.toLocaleString("id-ID")}`}
+                12 Jam :
+                {product.price12h === 0
+                  ? " Free"
+                  : ` Rp ${product.price12h.toLocaleString("id-ID")}`}
               </p>
 
               <p className="text-gray-700 text-lg">
-                Normal: Rp{" "}
-                {product.normalPrice.toLocaleString("id-ID")}
+                24 Jam :
+                {" "}
+                Rp {product.price24h.toLocaleString("id-ID")}
               </p>
-
             </div>
 
-            {/* SPEC */}
             <div className="mt-8">
-
               <h2 className="font-bold text-2xl mb-4">
                 Spesifikasi
               </h2>
 
               <div className="grid grid-cols-2 gap-2">
-
-                {product.specifications.map(
-                  (spec, index) => (
-                    <div
-                      key={index}
-                      className="bg-[#DEDEDE] p-3 rounded-xl text-sm"
-                    >
-                      {spec}
-                    </div>
-                  )
-                )}
-
+                {product.specifications.map((spec, index) => (
+                  <div
+                    key={index}
+                    className="bg-[#DEDEDE] p-3 rounded-xl text-sm"
+                  >
+                    {spec}
+                  </div>
+                ))}
               </div>
-
             </div>
 
-            {/* CALENDAR */}
             <div className="mt-8">
-
               <h2 className="font-bold text-xl mb-4">
                 Kalender Ketersediaan
               </h2>
 
               <div className="border rounded-2xl p-4">
-
                 <Calendar
                   onChange={setSelectedDate}
                   value={selectedDate}
@@ -163,25 +217,20 @@ function ProductDetail() {
                     const formatted =
                       date.toISOString().split("T")[0];
 
-                    return bookedDates.includes(
-                      formatted
-                    )
+                    return bookedDates.includes(formatted)
                       ? "bg-red-500 text-white rounded-full"
                       : null;
                   }}
                 />
-
               </div>
 
               <p className="mt-4 font-semibold">
-                Tanggal dipilih:{" "}
-                {selectedDate.toLocaleDateString(
-                  "id-ID"
-                )}
+                Tanggal dipilih :
+                {" "}
+                {selectedDate.toLocaleDateString("id-ID")}
               </p>
 
               <div className="flex gap-6 mt-4 text-sm">
-
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 bg-green-500 rounded-full"></div>
                   <span>Tersedia</span>
@@ -191,25 +240,19 @@ function ProductDetail() {
                   <div className="w-4 h-4 bg-red-500 rounded-full"></div>
                   <span>Disewa</span>
                 </div>
-
               </div>
-
             </div>
 
-            {/* QTY */}
             <div className="mt-8">
-
               <h2 className="font-bold mb-3">
                 Quantity
               </h2>
 
               <div className="flex items-center gap-4">
-
                 <button
                   onClick={() =>
                     setQty(qty > 1 ? qty - 1 : 1)
                   }
-                  aria-label="Kurangi quantity"
                   className="bg-[#B2B2B2] px-4 py-2 rounded-lg"
                 >
                   -
@@ -221,19 +264,14 @@ function ProductDetail() {
 
                 <button
                   onClick={() => setQty(qty + 1)}
-                  aria-label="Tambah quantity"
                   className="bg-[#B2B2B2] px-4 py-2 rounded-lg"
                 >
                   +
                 </button>
-
               </div>
-
             </div>
 
-            {/* TOTAL */}
             <div className="mt-8">
-
               <h2 className="font-bold text-xl">
                 Total Harga
               </h2>
@@ -241,10 +279,8 @@ function ProductDetail() {
               <p className="text-3xl font-bold mt-2">
                 Rp {totalPrice.toLocaleString("id-ID")}
               </p>
-
             </div>
 
-            {/* BUTTON */}
             <button
               onClick={() =>
                 navigate("/checkout", {
@@ -260,13 +296,10 @@ function ProductDetail() {
             >
               Booking Sekarang
             </button>
-
           </div>
 
         </div>
-
       </div>
-
     </div>
   );
 }

@@ -14,34 +14,32 @@ import { BookingProvider } from "./context/BookingContext";
 
 import { ToastContainer } from "react-toastify";
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-
+function Providers({ children }) {
+  return (
     <AuthProvider>
       <CartProvider>
-        <BookingProvider>
-
-          <BrowserRouter>
-
-            <App />
-
-            {/* 🔔 GLOBAL TOAST */}
-            <ToastContainer
-              position="top-right"
-              autoClose={2000}
-              hideProgressBar={false}
-              newestOnTop
-              closeOnClick
-              pauseOnHover
-              draggable
-              theme="light"
-            />
-
-          </BrowserRouter>
-
-        </BookingProvider>
+        <BookingProvider>{children}</BookingProvider>
       </CartProvider>
     </AuthProvider>
+  );
+}
 
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <Providers>
+        <App />
+
+        <ToastContainer
+          position="top-right"
+          autoClose={2000}
+          newestOnTop
+          closeOnClick
+          pauseOnHover
+          draggable
+          theme="light"
+        />
+      </Providers>
+    </BrowserRouter>
   </React.StrictMode>
 );

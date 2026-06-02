@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <footer className="bg-[#B2B2B2] text-white mt-20">
+    <footer className="bg-gray-900 text-white mt-20">
 
       <div className="max-w-7xl mx-auto px-6 py-12">
 
@@ -15,7 +15,7 @@ function Footer() {
               Sewakaran
             </h2>
 
-            <p className="text-gray-100 leading-relaxed">
+            <p className="text-gray-300 leading-relaxed">
               Platform penyewaan barang yang membantu
               pengguna menemukan berbagai kebutuhan
               dengan cepat, aman, dan terpercaya.
@@ -35,7 +35,7 @@ function Footer() {
               <li>
                 <Link
                   to="/"
-                  className="hover:text-gray-200 transition"
+                  className="text-gray-300 hover:text-white transition"
                 >
                   Home
                 </Link>
@@ -44,7 +44,7 @@ function Footer() {
               <li>
                 <Link
                   to="/about"
-                  className="hover:text-gray-200 transition"
+                  className="text-gray-300 hover:text-white transition"
                 >
                   About
                 </Link>
@@ -53,7 +53,7 @@ function Footer() {
               <li>
                 <Link
                   to="/booking-status"
-                  className="hover:text-gray-200 transition"
+                  className="text-gray-300 hover:text-white transition"
                 >
                   Booking Status
                 </Link>
@@ -70,18 +70,14 @@ function Footer() {
               Kontak
             </h3>
 
-            <div className="space-y-2">
+            <div className="space-y-2 text-gray-300">
+
+              <p>📷 @sewakaran_</p>
+
+              <p>📞 0858-0306-5136</p>
 
               <p>
-                📧 admin@sewakaran.com
-              </p>
-
-              <p>
-                📞 0812-3456-7890
-              </p>
-
-              <p>
-                📍 Magelang, Jawa Tengah
+                📍 Sekaran, Gunungpati, Kota Semarang, Jawa Tengah
               </p>
 
             </div>
@@ -91,9 +87,9 @@ function Footer() {
         </div>
 
         {/* COPYRIGHT */}
-        <div className="border-t border-gray-300 mt-10 pt-6 text-center">
+        <div className="border-t border-gray-700 mt-10 pt-6 text-center">
 
-          <p className="text-sm">
+          <p className="text-sm text-gray-400">
             © 2026 Sewakaran. All Rights Reserved.
           </p>
 

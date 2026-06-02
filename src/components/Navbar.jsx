@@ -7,11 +7,7 @@ function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
+    document.body.style.overflow = menuOpen ? "hidden" : "auto";
 
     return () => {
       document.body.style.overflow = "auto";
@@ -19,7 +15,8 @@ function Navbar() {
   }, [menuOpen]);
 
   return (
-    <nav className="bg-[#B2B2B2] shadow-md sticky top-0 z-50">
+    <nav className="bg-gray-900 shadow-md sticky top-0 z-50">
+
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
 
         {/* HEADER */}
@@ -37,33 +34,21 @@ function Navbar() {
           {/* DESKTOP MENU */}
           <div className="hidden md:flex items-center gap-6">
 
-            <Link
-              to="/"
-              className="text-white hover:text-gray-200 transition"
-            >
+            <Link to="/" className="text-white hover:text-gray-300 transition">
               Home
             </Link>
 
-            <Link
-              to="/about"
-              className="text-white hover:text-gray-200 transition"
-            >
+            <Link to="/about" className="text-white hover:text-gray-300 transition">
               About
             </Link>
 
             {user && (
               <>
-                <Link
-                  to="/dashboard"
-                  className="text-white hover:text-gray-200 transition"
-                >
+                <Link to="/dashboard" className="text-white hover:text-gray-300 transition">
                   Dashboard
                 </Link>
 
-                <Link
-                  to="/booking-status"
-                  className="text-white hover:text-gray-200 transition"
-                >
+                <Link to="/booking-status" className="text-white hover:text-gray-300 transition">
                   Booking
                 </Link>
               </>
@@ -72,14 +57,14 @@ function Navbar() {
             {!user ? (
               <Link
                 to="/login"
-                className="bg-white text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-100 transition"
+                className="bg-white text-gray-800 px-4 py-2 rounded-xl hover:bg-gray-100 transition"
               >
                 Login
               </Link>
             ) : (
               <button
                 onClick={logout}
-                className="bg-white text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-100 transition"
+                className="bg-white text-gray-800 px-4 py-2 rounded-xl hover:bg-gray-100 transition"
               >
                 Logout
               </button>
@@ -97,9 +82,17 @@ function Navbar() {
 
         </div>
 
+        {/* OVERLAY */}
+        {menuOpen && (
+          <div
+            className="fixed inset-0 bg-black/40 md:hidden"
+            onClick={() => setMenuOpen(false)}
+          />
+        )}
+
         {/* MOBILE MENU */}
         <div
-          className={`md:hidden overflow-hidden transition-all duration-300 ${
+          className={`md:hidden overflow-hidden transition-all duration-300 relative z-50 ${
             menuOpen ? "max-h-96 mt-4" : "max-h-0"
           }`}
         >
@@ -147,7 +140,7 @@ function Navbar() {
                 <Link
                   to="/login"
                   onClick={() => setMenuOpen(false)}
-                  className="bg-[#B2B2B2] text-white text-center py-2 rounded-xl"
+                  className="bg-gray-900 text-white text-center py-2 rounded-xl"
                 >
                   Login
                 </Link>
@@ -157,7 +150,7 @@ function Navbar() {
                     logout();
                     setMenuOpen(false);
                   }}
-                  className="bg-[#B2B2B2] text-white py-2 rounded-xl"
+                  className="bg-gray-900 text-white py-2 rounded-xl"
                 >
                   Logout
                 </button>

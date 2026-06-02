@@ -1,4 +1,5 @@
 function EmptyState({
+  icon = "📭",
   title = "Data tidak ditemukan",
   description = "Tidak ada data yang bisa ditampilkan saat ini.",
   actionText,
@@ -11,22 +12,18 @@ function EmptyState({
       aria-live="polite"
     >
 
-      {/* ICON */}
       <div className="text-6xl mb-4">
-        📭
+        {icon}
       </div>
 
-      {/* TITLE */}
       <h2 className="text-xl font-bold text-gray-800">
         {title}
       </h2>
 
-      {/* DESCRIPTION */}
       <p className="text-gray-500 mt-2 max-w-md">
         {description}
       </p>
 
-      {/* ACTION BUTTON (optional) */}
       {actionText && onAction && (
         <button
           onClick={onAction}

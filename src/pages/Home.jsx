@@ -1,9 +1,19 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ProductCard from "../components/ProductCard";
 import BundlingCard from "../components/BundlingCard";
+
+import heroImage from "../assets/logo-sewakaran.jpeg";
+
+import handieTalkie from "../assets/handie-talkie.jpeg";
+import soundSystem from "../assets/sound-system.jpeg";
+import tripod from "../assets/tripod.jpeg";
+import stand from "../assets/stand.jpeg";
+import mic from "../assets/mic.jpeg";
+import earphone from "../assets/earphone-ht.jpeg";
+import chargerSystem from "../assets/charger-system.jpeg";
 
 function Home() {
   const [products, setProducts] = useState([]);
@@ -12,21 +22,19 @@ function Home() {
   const bundlings = [
     {
       id: 1,
-      title: "Bundle",
-      description: "Sound, Stand, Mic",
-      memberPrice: "30K",
-      normalPrice: "50K",
-      image:
-        "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=500",
+      title: "Bundle Audio",
+      description: "Sound System, Stand, Mic",
+      price12h: 30000,
+      price24h: 50000,
+      image: soundSystem,
     },
     {
       id: 2,
-      title: "Bundle",
+      title: "Bundle Komunikasi",
       description: "HT, Earphone, Charger",
-      memberPrice: "10K",
-      normalPrice: "15K",
-      image:
-        "https://images.unsplash.com/photo-1586769852044-692d6e3703f0?w=500",
+      price12h: 10000,
+      price24h: 15000,
+      image: handieTalkie,
     },
   ];
 
@@ -35,64 +43,57 @@ function Home() {
       {
         id: 1,
         title: "Handie Talkie",
-        memberPrice: 8000,
-        normalPrice: 12000,
-        image:
-          "https://images.unsplash.com/photo-1586769852044-692d6e3703f0?w=500",
+        price12h: 8000,
+        price24h: 12000,
+        image: handieTalkie,
         status: "Tersedia",
       },
       {
         id: 2,
         title: "Sound System",
-        memberPrice: 25000,
-        normalPrice: 40000,
-        image:
-          "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=500",
+        price12h: 25000,
+        price24h: 40000,
+        image: soundSystem,
         status: "Tersedia",
       },
       {
         id: 3,
         title: "Tripod",
-        memberPrice: 8000,
-        normalPrice: 13000,
-        image:
-          "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500",
+        price12h: 8000,
+        price24h: 13000,
+        image: tripod,
         status: "Tersedia",
       },
       {
         id: 4,
         title: "Stand",
-        memberPrice: 10000,
-        normalPrice: 15000,
-        image:
-          "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=500",
+        price12h: 10000,
+        price24h: 15000,
+        image: stand,
         status: "Disewa",
       },
       {
         id: 5,
-        title: "Mic",
-        memberPrice: 10000,
-        normalPrice: 15000,
-        image:
-          "https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=500",
+        title: "Mic Wireless",
+        price12h: 10000,
+        price24h: 15000,
+        image: mic,
         status: "Tersedia",
       },
       {
         id: 6,
-        title: "Earphone",
-        memberPrice: 0,
-        normalPrice: 3000,
-        image:
-          "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500",
+        title: "Earphone HT",
+        price12h: 0,
+        price24h: 3000,
+        image: earphone,
         status: "Tersedia",
       },
       {
         id: 7,
         title: "Charger System",
-        memberPrice: 3000,
-        normalPrice: 5000,
-        image:
-          "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=500",
+        price12h: 3000,
+        price24h: 5000,
+        image: chargerSystem,
         status: "Tersedia",
       },
     ];
@@ -108,7 +109,6 @@ function Home() {
       <section className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
         <div className="bg-white rounded-3xl shadow-lg p-6 md:p-12">
           <div className="grid md:grid-cols-2 gap-8 items-center">
-
             <div className="text-center md:text-left">
               <h1 className="text-3xl md:text-5xl font-bold text-gray-800 mb-4">
                 Sewakaran
@@ -123,20 +123,18 @@ function Home() {
 
             <div className="flex justify-center">
               <img
-                src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=700"
-                alt="Rental"
-                className="rounded-3xl w-full max-w-md"
+                src={heroImage}
+                alt="Logo Sewakaran"
+                className="w-72 md:w-96 object-contain"
               />
             </div>
-
           </div>
         </div>
       </section>
 
-      {/* TAB MENU */}
+      {/* TAB */}
       <section className="max-w-7xl mx-auto px-4 md:px-6 pb-8">
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-
           <button
             onClick={() => setActiveTab("barang")}
             className={`w-full sm:w-auto px-8 py-3 rounded-2xl font-semibold transition ${
@@ -158,43 +156,34 @@ function Home() {
           >
             Bundling
           </button>
-
         </div>
       </section>
 
-      {/* BARANG */}
+      {/* PRODUK */}
       {activeTab === "barang" && (
         <section className="max-w-7xl mx-auto px-4 md:px-6 pb-20">
-
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-
             {products.map((product) => (
               <ProductCard
                 key={product.id}
                 product={product}
               />
             ))}
-
           </div>
-
         </section>
       )}
 
       {/* BUNDLING */}
       {activeTab === "bundling" && (
         <section className="max-w-7xl mx-auto px-4 md:px-6 pb-20">
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-
             {bundlings.map((bundle) => (
               <BundlingCard
                 key={bundle.id}
                 bundle={bundle}
               />
             ))}
-
           </div>
-
         </section>
       )}
 

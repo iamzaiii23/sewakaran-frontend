@@ -1,7 +1,17 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
-console.log(import.meta.env.VITE_FIREBASE_API_KEY);
+const requiredEnv = [
+  "VITE_FIREBASE_API_KEY",
+  "VITE_FIREBASE_AUTH_DOMAIN",
+  "VITE_FIREBASE_PROJECT_ID",
+];
+
+requiredEnv.forEach((key) => {
+  if (!import.meta.env[key]) {
+    throw new Error(`Missing env: ${key}`);
+  }
+});
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -15,5 +25,4 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
-
 export const provider = new GoogleAuthProvider();

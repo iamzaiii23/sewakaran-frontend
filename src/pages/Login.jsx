@@ -1,8 +1,16 @@
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 function Login() {
   const { login, user } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
 
   return (
     <div className="min-h-screen bg-[#DEDEDE] flex items-center justify-center p-4">
@@ -15,7 +23,6 @@ function Login() {
             <h1 className="text-4xl font-bold text-white">
               Sewakaran
             </h1>
-
             <p className="text-white text-sm mt-2">
               Borrowing Services
             </p>
@@ -36,21 +43,20 @@ function Login() {
             </button>
           </div>
 
-          {/* EMAIL */}
+          {/* INPUT (UI only) */}
           <input
             type="email"
             placeholder="Email Address"
             className="w-full border-b border-gray-300 py-3 mb-5 outline-none"
           />
 
-          {/* PASSWORD */}
           <input
             type="password"
             placeholder="Password"
             className="w-full border-b border-gray-300 py-3 mb-5 outline-none"
           />
 
-          {/* REMEMBER */}
+          {/* OPTIONS */}
           <div className="flex justify-between text-sm mb-6">
             <label className="flex items-center gap-2 text-gray-600">
               <input type="checkbox" />
@@ -62,12 +68,15 @@ function Login() {
             </span>
           </div>
 
-          {/* LOGIN BUTTON */}
-          <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition">
-            Login
+          {/* LOGIN BUTTON (Google Auth) */}
+          <button
+            onClick={login}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition"
+          >
+            Login with Google
           </button>
 
-          {/* GOOGLE LOGIN */}
+          {/* GOOGLE ICON LOGIN */}
           <div className="mt-8 text-center">
 
             <p className="text-gray-500 mb-4">
@@ -117,9 +126,8 @@ function Login() {
 
         </div>
 
-        {/* FOOTER ILLUSTRATION */}
+        {/* FOOTER */}
         <div className="bg-[#A0A0A0] p-6">
-
           <div className="bg-white rounded-full w-64 h-32 mx-auto flex items-center justify-center">
 
             <img
@@ -129,7 +137,6 @@ function Login() {
             />
 
           </div>
-
         </div>
 
       </div>

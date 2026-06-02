@@ -1,4 +1,13 @@
+import { NavLink } from "react-router-dom";
+
 function AdminSidebar() {
+  const menu = [
+    { to: "/admin", label: "Dashboard" },
+    { to: "/admin/booking", label: "Booking" },
+    { to: "/admin/pembayaran", label: "Pembayaran" },
+    { to: "/admin/stok", label: "Stok Barang" },
+  ];
+
   return (
     <div className="bg-blue-700 text-white w-72 min-h-screen p-6">
 
@@ -7,23 +16,19 @@ function AdminSidebar() {
       </h1>
 
       <div className="space-y-4">
-
-        <button className="w-full text-left bg-blue-600 px-4 py-3 rounded-xl">
-          Dashboard
-        </button>
-
-        <button className="w-full text-left hover:bg-blue-600 px-4 py-3 rounded-xl transition">
-          Booking
-        </button>
-
-        <button className="w-full text-left hover:bg-blue-600 px-4 py-3 rounded-xl transition">
-          Pembayaran
-        </button>
-
-        <button className="w-full text-left hover:bg-blue-600 px-4 py-3 rounded-xl transition">
-          Stok Barang
-        </button>
-
+        {menu.map((item) => (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            className={({ isActive }) =>
+              `block w-full text-left px-4 py-3 rounded-xl transition ${
+                isActive ? "bg-blue-500" : "hover:bg-blue-600"
+              }`
+            }
+          >
+            {item.label}
+          </NavLink>
+        ))}
       </div>
 
     </div>

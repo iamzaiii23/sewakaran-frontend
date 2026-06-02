@@ -6,15 +6,25 @@ import EmptyState from "../components/EmptyState";
 function ProductList() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        setLoading(true);
+        setError(null);
+
         const res = await fetch("/api/products");
+
+        if (!res.ok) {
+          throw new Error("Gagal mengambil data produk");
+        }
+
         const data = await res.json();
         setProducts(data);
+
       } catch (error) {
-        console.error(error);
+        setError(error.message);
       } finally {
         setLoading(false);
       }
@@ -31,11 +41,28 @@ function ProductList() {
         Array(6).fill(0).map((_, i) => (
           <ProductCardSkeleton key={i} />
         ))
+      ) : error ? (
+
+        /* ERROR STATE */
+        <div className="col-span-full">
+          <EmptyState
+            title="Terjadi Kesalahan"
+            description={error}
+            actionText="Coba Lagi"
+            onAction={() => window.location.reload()}
+            icon="⚠️"
+          />
+        </div>
+
       ) : products.length === 0 ? (
 
         /* EMPTY STATE */
         <div className="col-span-full">
-          <EmptyState />
+          <EmptyState
+            title="Belum ada produk"
+            description="Produk akan segera tersedia"
+            icon="📦"
+          />
         </div>
 
       ) : (

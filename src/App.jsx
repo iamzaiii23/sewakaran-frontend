@@ -12,12 +12,17 @@ import Checkout from "./pages/Checkout";
 import BookingStatus from "./pages/BookingStatus";
 
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminBooking from "./pages/AdminBooking";
+import AdminPembayaran from "./pages/AdminPembayaran";
+import AdminStok from "./pages/AdminStok";
+
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
   return (
     <Routes>
 
-      {/* USER */}
+      {/* PUBLIC */}
       <Route
         path="/"
         element={<Home />}
@@ -33,9 +38,14 @@ function App() {
         element={<Login />}
       />
 
+      {/* USER */}
       <Route
         path="/dashboard"
-        element={<Dashboard />}
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
       />
 
       <Route
@@ -50,18 +60,41 @@ function App() {
 
       <Route
         path="/checkout"
-        element={<Checkout />}
+        element={
+          <ProtectedRoute>
+            <Checkout />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/booking-status"
-        element={<BookingStatus />}
+        element={
+          <ProtectedRoute>
+            <BookingStatus />
+          </ProtectedRoute>
+        }
       />
 
       {/* ADMIN */}
       <Route
         path="/admin"
         element={<AdminDashboard />}
+      />
+
+      <Route
+        path="/admin/booking"
+        element={<AdminBooking />}
+      />
+
+      <Route
+        path="/admin/pembayaran"
+        element={<AdminPembayaran />}
+      />
+
+      <Route
+        path="/admin/stok"
+        element={<AdminStok />}
       />
 
     </Routes>

@@ -9,11 +9,10 @@ function ConfirmModal({
   confirmText = "Ya",
   cancelText = "Batal",
 }) {
-  // ESC to close modal
   useEffect(() => {
     const handleEsc = (e) => {
       if (e.key === "Escape") {
-        onClose();
+        onClose?.();
       }
     };
 
@@ -24,7 +23,7 @@ function ConfirmModal({
     return () => {
       window.removeEventListener("keydown", handleEsc);
     };
-  }, [open, onClose]);
+  }, [open]);
 
   if (!open) return null;
 
@@ -35,15 +34,13 @@ function ConfirmModal({
       aria-modal="true"
       aria-labelledby="modal-title"
       aria-describedby="modal-description"
-      onClick={onClose} // klik background untuk close
+      onClick={onClose}
     >
-      {/* MODAL BOX */}
       <div
         className="bg-white w-[90%] max-w-md rounded-2xl shadow-lg p-6"
-        onClick={(e) => e.stopPropagation()} // biar klik dalam tidak close
+        onClick={(e) => e.stopPropagation()}
       >
 
-        {/* TITLE */}
         <h2
           id="modal-title"
           className="text-xl font-bold text-gray-800"
@@ -51,7 +48,6 @@ function ConfirmModal({
           {title}
         </h2>
 
-        {/* MESSAGE */}
         <p
           id="modal-description"
           className="text-gray-600 mt-3"
@@ -59,7 +55,6 @@ function ConfirmModal({
           {message}
         </p>
 
-        {/* BUTTONS */}
         <div className="flex justify-end gap-3 mt-6">
 
           <button

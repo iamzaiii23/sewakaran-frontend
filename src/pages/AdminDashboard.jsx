@@ -1,53 +1,91 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { toast } from "react-toastify";
 
 import AdminSidebar from "../components/AdminSidebar";
 import BookingTable from "../components/BookingTable";
 import ConfirmModal from "../components/ConfirmModal";
 
+const fakeAPI = {
+  update: (id, status) =>
+    new Promise((res) => setTimeout(res, 500)),
+  delete: (id) =>
+    new Promise((res) => setTimeout(res, 500)),
+};
+
 function AdminDashboard() {
   const [openModal, setOpenModal] = useState(false);
-  const [actionType, setActionType] = useState("");
+  const [action, setAction] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  // dummy stats (nanti ganti API)
-  const stats = {
+  const [stats] = useState({
     totalBooking: 120,
     pendingPayment: 15,
     availableItems: 350,
-  };
+  });
+
+  const actionMap = useMemo(
+    () => ({
+      approve: {
+        label: "Approve Booking",
+        message: "menyetujui booking",
+        fn: (id) => fakeAPI.update(id, "approved"),
+        toast: "success",
+      },
+      reject: {
+        label: "Reject Booking",
+        message: "menolak booking",
+        fn: (id) => fakeAPI.update(id, "rejected"),
+        toast: "error",
+      },
+      delete: {
+        label: "Hapus Booking",
+        message: "menghapus booking",
+        fn: (id) => fakeAPI.delete(id),
+        toast: "success",
+      },
+    }),
+    []
+  );
 
   const handleActionClick = (type, id) => {
-    setActionType(type);
+    setAction(type);
     setSelectedId(id);
     setOpenModal(true);
   };
 
-  const handleConfirm = () => {
-    if (actionType === "delete") {
-      toast.success(`Booking #${selectedId} berhasil dihapus`);
-    }
+  const handleConfirm = async () => {
+    if (!action || !selectedId) return;
 
-    if (actionType === "approve") {
-      toast.success(`Booking #${selectedId} disetujui`);
-    }
+    try {
+      setLoading(true);
 
-    if (actionType === "reject") {
-      toast.error(`Booking #${selectedId} ditolak`);
-    }
+      await actionMap[action].fn(selectedId);
 
-    setOpenModal(false);
-    setActionType("");
-    setSelectedId(null);
+      toast[actionMap[action].toast](
+        `Booking #${selectedId} berhasil ${actionMap[action].message}`
+      );
+
+      setOpenModal(false);
+      setAction(null);
+      setSelectedId(null);
+
+    } catch (err) {
+      toast.error("Terjadi kesalahan");
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const config = action
+    ? actionMap[action]
+    : { label: "", message: "" };
 
   return (
     <div className="flex bg-gray-100 min-h-screen">
 
-      {/* SIDEBAR */}
       <AdminSidebar />
 
-      {/* CONTENT */}
       <div className="flex-1 p-8">
 
         {/* HEADER */}
@@ -55,7 +93,6 @@ function AdminDashboard() {
           <h1 className="text-4xl font-bold text-gray-800">
             Dashboard Admin
           </h1>
-
           <p className="text-gray-500 mt-2">
             Monitor booking dan validasi pembayaran
           </p>
@@ -89,40 +126,26 @@ function AdminDashboard() {
 
         {/* TABLE */}
         <div className="bg-white rounded-3xl shadow-lg p-6">
-
           <h2 className="text-xl font-bold mb-6">
             Data Booking
           </h2>
 
-          {/* Booking Table (harus support callback action) */}
           <BookingTable onActionClick={handleActionClick} />
-
         </div>
 
-        {/* CONFIRM MODAL */}
-        <ConfirmModal
-          open={openModal}
-          title={
-            actionType === "delete"
-              ? "Hapus Booking"
-              : actionType === "approve"
-              ? "Approve Booking"
-              : "Reject Booking"
-          }
-          message={`Yakin ingin ${
-            actionType === "delete"
-              ? "menghapus"
-              : actionType === "approve"
-              ? "menyetujui"
-              : "menolak"
-          } booking #${selectedId}?`}
-          confirmText="Ya, Lanjut"
-          onClose={() => setOpenModal(false)}
-          onConfirm={handleConfirm}
-        />
+        {/* MODAL */}
+        {openModal && (
+          <ConfirmModal
+            title={config.label}
+            message={`Yakin ingin ${config.message} #${selectedId}?`}
+            confirmText={loading ? "Processing..." : "Ya"}
+            cancelText="Tidak"
+            onClose={() => setOpenModal(false)}
+            onConfirm={handleConfirm}
+          />
+        )}
 
       </div>
-
     </div>
   );
 }

@@ -4,15 +4,15 @@ function ProductCard({ product }) {
   return (
     <div className="bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-xl hover:scale-105 transition duration-300 h-full">
 
-      {/* IMAGE */}
-      <img
-        src={product.image}
-        alt={product.title}
-        className="w-full h-36 md:h-48 object-cover"
-      />
+      <div className="w-full h-48 bg-white flex items-center justify-center p-4">
+        <img
+          src={product.image}
+          alt={product.title}
+          className="max-h-full max-w-full object-contain"
+        />
+      </div>
 
-      {/* CONTENT */}
-      <div className="p-4 md:p-5 flex flex-col justify-between h-[220px] md:h-[240px]">
+      <div className="p-4 md:p-5 flex flex-col justify-between h-[240px]">
 
         <div>
 
@@ -20,28 +20,21 @@ function ProductCard({ product }) {
             {product.title}
           </h2>
 
-          <div className="mt-3">
+          <div className="mt-3 space-y-1">
 
             <p className="text-green-700 font-semibold text-sm md:text-base">
-              Member :
-              {product.memberPrice === 0
-                ? " Free"
-                : ` Rp ${product.memberPrice.toLocaleString("id-ID")}`}
+              12 Jam: Rp {(product.price12h || 0).toLocaleString("id-ID")}
             </p>
 
             <p className="text-gray-600 text-sm md:text-base">
-              Normal :
-              Rp{" "}
-              {product.normalPrice.toLocaleString("id-ID")}
+              24 Jam: Rp {(product.price24h || 0).toLocaleString("id-ID")}
             </p>
 
           </div>
 
-          {/* STATUS */}
           <div className="mt-4">
-
             <span
-              className={`px-3 py-1 rounded-full text-xs md:text-sm font-medium ${
+              className={`px-3 py-1 rounded-full text-xs font-medium ${
                 product.status === "Tersedia"
                   ? "bg-green-100 text-green-700"
                   : "bg-red-100 text-red-700"
@@ -49,15 +42,13 @@ function ProductCard({ product }) {
             >
               {product.status}
             </span>
-
           </div>
 
         </div>
 
-        {/* BUTTON */}
         <Link
           to={`/product/${product.id}`}
-          className="block mt-5 text-center bg-[#B2B2B2] hover:bg-[#8f8f8f] text-white py-3 rounded-2xl transition text-sm md:text-base"
+          className="block mt-5 text-center bg-[#B2B2B2] hover:bg-[#8f8f8f] text-white py-3 rounded-2xl transition"
         >
           Lihat Detail
         </Link>

@@ -3,66 +3,37 @@ import { Link } from "react-router-dom";
 function BundlingCard({ bundle }) {
   return (
     <Link to={`/bundling/${bundle.id}`}>
-      <div className="bg-white rounded-3xl shadow-lg p-4 md:p-6 hover:scale-105 transition duration-300">
+      <div className="bg-white rounded-3xl shadow-lg p-6 hover:shadow-xl hover:scale-105 transition">
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+        <div className="grid md:grid-cols-2 gap-6 items-center">
 
-          {/* IMAGE */}
-          <div className="flex justify-center">
-
+          <div className="w-full h-52 flex items-center justify-center bg-white rounded-2xl">
             <img
               src={bundle.image}
               alt={bundle.title}
-              className="
-                w-full
-                max-w-[250px]
-                md:max-w-[280px]
-                h-48
-                md:h-56
-                object-cover
-                rounded-2xl
-              "
+              className="max-h-full max-w-full object-contain rounded-2xl"
             />
-
           </div>
 
-          {/* CONTENT */}
           <div className="text-center">
 
-            <h3 className="text-xl md:text-2xl font-semibold text-gray-800">
+            <h3 className="text-xl font-semibold">
               {bundle.title}
             </h3>
 
-            <p className="text-gray-700 mt-3 text-sm md:text-base">
+            <p className="text-gray-600 mt-2">
               {bundle.description}
             </p>
 
-            <div className="mt-4">
+            <p className="mt-4 text-sm text-green-700 font-semibold">
+              12 Jam: Rp {(bundle.price12h || 0).toLocaleString("id-ID")}
+            </p>
 
-              <p className="text-sm text-gray-500">
-                Harga Member / Normal
-              </p>
+            <p className="text-sm text-gray-600">
+              24 Jam: Rp {(bundle.price24h || 0).toLocaleString("id-ID")}
+            </p>
 
-              <p className="text-lg md:text-xl font-bold text-gray-800">
-                {bundle.memberPrice} / {bundle.normalPrice}
-              </p>
-
-            </div>
-
-            <button
-              className="
-                mt-5
-                w-full
-                md:w-auto
-                bg-[#B2B2B2]
-                hover:bg-[#909090]
-                text-white
-                px-6
-                py-3
-                rounded-xl
-                transition
-              "
-            >
+            <button className="mt-5 w-full bg-[#B2B2B2] hover:bg-[#8f8f8f] text-white py-3 rounded-xl transition">
               Detail
             </button>
 
