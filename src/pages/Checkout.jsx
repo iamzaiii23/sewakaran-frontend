@@ -2,6 +2,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
+// QRIS IMAGE
+import qrisImage from "../assets/qris.jpeg";
+
 function Checkout() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -17,8 +20,15 @@ function Checkout() {
   if (!bookingData) {
     return (
       <div className="min-h-screen flex items-center justify-center flex-col">
-        <h1>Data tidak ditemukan</h1>
-        <button onClick={() => navigate("/")}>Home</button>
+        <h1 className="text-xl font-bold mb-3">
+          Data tidak ditemukan
+        </h1>
+        <button
+          onClick={() => navigate("/")}
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Home
+        </button>
       </div>
     );
   }
@@ -27,7 +37,7 @@ function Checkout() {
 
   const handleSubmit = () => {
     if (!name || !phone) {
-      toast.error("Lengkapi data");
+      toast.error("Lengkapi data terlebih dahulu");
       return;
     }
 
@@ -42,7 +52,7 @@ function Checkout() {
       setLoading(false);
       setPaid(true);
 
-      toast.success("Booking berhasil");
+      toast.success("Booking berhasil dibuat");
 
       navigate("/booking-status", {
         state: {
@@ -58,12 +68,16 @@ function Checkout() {
   };
 
   return (
-    <div className="min-h-screen bg-[#DEDEDE] p-6">
+    <div className="min-h-screen bg-gray-200 p-6">
 
-      <div className="max-w-md mx-auto bg-white rounded-2xl p-5">
+      <div className="max-w-md mx-auto bg-white rounded-2xl p-6 shadow">
 
-        <h1 className="text-2xl font-bold mb-4">Checkout</h1>
+        {/* TITLE */}
+        <h1 className="text-2xl font-bold mb-4">
+          Checkout
+        </h1>
 
+        {/* USER INPUT */}
         <input
           className="w-full p-3 bg-gray-100 rounded mb-3"
           placeholder="Nama"
@@ -76,9 +90,10 @@ function Checkout() {
           onChange={(e) => setPhone(e.target.value)}
         />
 
-        <div className="border p-3 rounded mb-3">
-          <p>{product.title}</p>
-          <p className="font-bold">
+        {/* PRODUCT INFO */}
+        <div className="border p-4 rounded mb-4 bg-gray-50">
+          <p className="font-medium">{product.title}</p>
+          <p className="font-bold text-lg">
             Rp {totalPrice.toLocaleString("id-ID")}
           </p>
           <p className="text-sm text-gray-500">
@@ -86,21 +101,41 @@ function Checkout() {
           </p>
         </div>
 
+        {/* QRIS SECTION */}
+        <div className="border p-4 rounded mb-4 text-center bg-white">
+          <p className="font-semibold mb-3">
+            Scan QRIS untuk pembayaran
+          </p>
+
+          <img
+            src={qrisImage}
+            alt="QRIS Payment"
+            className="w-full rounded-lg"
+          />
+        </div>
+
+        {/* UPLOAD PROOF */}
         <input
           type="file"
+          className="mb-4"
           onChange={(e) => setPaymentProof(e.target.files[0])}
         />
 
+        {/* BUTTON */}
         <button
           onClick={handleSubmit}
           disabled={loading || paid}
-          className="w-full mt-4 bg-[#B2B2B2] text-white py-3 rounded-xl"
+          className={`w-full py-3 rounded-xl text-white transition ${
+            paid
+              ? "bg-green-500"
+              : "bg-gray-500 hover:bg-gray-600"
+          }`}
         >
           {loading
-            ? "Loading..."
+            ? "Processing..."
             : paid
             ? "Sudah Dibayar"
-            : "Konfirmasi"}
+            : "Konfirmasi Pembayaran"}
         </button>
 
       </div>
