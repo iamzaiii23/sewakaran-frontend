@@ -1,139 +1,63 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+import axios from "axios";
 
-import handieTalkie from "../assets/handie-talkie.jpeg";
-import soundSystem from "../assets/sound-system.jpeg";
-import tripod from "../assets/tripod.jpeg";
-import stand from "../assets/stand.jpeg";
-import mic from "../assets/mic.jpeg";
-import earphone from "../assets/earphone-ht.jpeg";
-import chargerSystem from "../assets/charger-system.jpeg";
+import "react-calendar/dist/Calendar.css";
 
 function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const [product, setProduct] = useState(null);
+  const [bookedDates, setBookedDates] = useState([]);
+
   const [qty, setQty] = useState(1);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] =
+    useState(new Date());
 
-  const bookedDates = [
-    "2026-06-10",
-    "2026-06-11",
-    "2026-06-12",
-  ];
+  const [loading, setLoading] = useState(true);
 
-  const products = [
-    {
-      id: 1,
-      title: "Handie Talkie",
-      price12h: 8000,
-      price24h: 12000,
-      image: handieTalkie,
-      specifications: [
-        "Frequency Range",
-        "UHF 400-438MHz",
-        "RF Rated Power 2W",
-        "Channel Capacity 16",
-        "Operated Voltage 3.7V",
-        "Battery 1500mAh",
-      ],
-    },
-    {
-      id: 2,
-      title: "Sound System",
-      price12h: 25000,
-      price24h: 40000,
-      image: soundSystem,
-      specifications: [
-        "Frequency Range",
-        "UHF 400-438MHz",
-        "RF Rated Power 2W",
-        "Channel Capacity 16",
-        "Operated Voltage 3.7V",
-        "Battery 1500mAh",
-      ],
-    },
-    {
-      id: 3,
-      title: "Tripod",
-      price12h: 8000,
-      price24h: 13000,
-      image: tripod,
-      specifications: [
-        "Max Height 136 cm",
-        "Folded Length 52 cm",
-        "Material Aluminium",
-        "3-Way Pan Head",
-        "Quick Release Plate",
-        "Load Capacity 3 kg",
-      ],
-    },
-    {
-      id: 4,
-      title: "Stand",
-      price12h: 10000,
-      price24h: 15000,
-      image: stand,
-      specifications: [
-        "Adjustable Height",
-        "Material Steel Iron",
-        "Tripod Leg Design",
-        "Strong Construction",
-        "Portable",
-      ],
-    },
-    {
-      id: 5,
-      title: "Mic Wireless",
-      price12h: 10000,
-      price24h: 15000,
-      image: mic,
-      specifications: [
-        "Frequency Range",
-        "UHF 400-438MHz",
-        "RF Rated Power 2W",
-        "Channel Capacity 16",
-        "Operated Voltage 3.7V",
-        "Battery 1500mAh",
-      ],
-    },
-    {
-      id: 6,
-      title: "Earphone HT",
-      price12h: 0,
-      price24h: 3000,
-      image: earphone,
-      specifications: [
-        "Frequency Range",
-        "UHF 400-438MHz",
-        "RF Rated Power 2W",
-        "Channel Capacity 16",
-        "Operated Voltage 3.7V",
-        "Battery 1500mAh",
-      ],
-    },
-    {
-      id: 7,
-      title: "Charger System",
-      price12h: 3000,
-      price24h: 5000,
-      image: chargerSystem,
-      specifications: [
-        "Frequency Range",
-        "UHF 400-438MHz",
-        "RF Rated Power 2W",
-        "Channel Capacity 16",
-        "Operated Voltage 3.7V",
-        "Battery 1500mAh",
-      ],
-    },
-  ];
+  useEffect(() => {
+    fetchProduct();
+    fetchUnavailableDates();
+  }, [id]);
 
-  const product = products.find(
-    (item) => item.id === Number(id)
-  );
+  const fetchProduct = async () => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/barang/${id}`
+      );
+
+      setProduct(response.data.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchUnavailableDates = async () => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/barang/${id}/unavailable-dates`
+      );
+
+      setBookedDates(response.data.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <h1 className="text-2xl font-bold">
+          Loading...
+        </h1>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -152,58 +76,78 @@ function ProductDetail() {
     );
   }
 
-  const totalPrice = qty * product.price24h;
+  const totalPrice =
+    qty * product.harga_24_jam;
 
   return (
     <div className="min-h-screen bg-[#DEDEDE] py-10 px-4">
       <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-lg p-8">
         <div className="grid md:grid-cols-2 gap-10">
 
+          {/* IMAGE */}
           <div className="flex items-center justify-center bg-white rounded-3xl p-6">
             <img
-              src={product.image}
-              alt={product.title}
+              src={`http://127.0.0.1:8000/images/${product.gambar}`}
+              alt={product.nama_barang}
               className="max-h-[400px] max-w-full object-contain"
             />
           </div>
 
+          {/* DETAIL */}
           <div>
+
             <h1 className="text-4xl font-bold text-gray-800">
-              {product.title}
+              {product.nama_barang}
             </h1>
 
+            <p className="text-gray-600 mt-2">
+              {product.deskripsi}
+            </p>
+
+            {/* HARGA */}
             <div className="mt-4">
               <p className="text-green-700 font-bold text-xl">
                 12 Jam :
-                {product.price12h === 0
+                {product.harga_12_jam === 0
                   ? " Free"
-                  : ` Rp ${product.price12h.toLocaleString("id-ID")}`}
+                  : ` Rp ${product.harga_12_jam.toLocaleString("id-ID")}`}
               </p>
 
               <p className="text-gray-700 text-lg">
                 24 Jam :
                 {" "}
-                Rp {product.price24h.toLocaleString("id-ID")}
+                Rp{" "}
+                {product.harga_24_jam.toLocaleString(
+                  "id-ID"
+                )}
               </p>
             </div>
 
+            {/* SPESIFIKASI */}
             <div className="mt-8">
               <h2 className="font-bold text-2xl mb-4">
                 Spesifikasi
               </h2>
 
               <div className="grid grid-cols-2 gap-2">
-                {product.specifications.map((spec, index) => (
+                {Object.entries(
+                  product.spesifikasi || {}
+                ).map(([key, value]) => (
                   <div
-                    key={index}
+                    key={key}
                     className="bg-[#DEDEDE] p-3 rounded-xl text-sm"
                   >
-                    {spec}
+                    <p className="font-bold">
+                      {key}
+                    </p>
+
+                    <p>{value}</p>
                   </div>
                 ))}
               </div>
             </div>
 
+            {/* CALENDAR */}
             <div className="mt-8">
               <h2 className="font-bold text-xl mb-4">
                 Kalender Ketersediaan
@@ -215,9 +159,13 @@ function ProductDetail() {
                   value={selectedDate}
                   tileClassName={({ date }) => {
                     const formatted =
-                      date.toISOString().split("T")[0];
+                      date
+                        .toISOString()
+                        .split("T")[0];
 
-                    return bookedDates.includes(formatted)
+                    return bookedDates.includes(
+                      formatted
+                    )
                       ? "bg-red-500 text-white rounded-full"
                       : null;
                   }}
@@ -227,22 +175,13 @@ function ProductDetail() {
               <p className="mt-4 font-semibold">
                 Tanggal dipilih :
                 {" "}
-                {selectedDate.toLocaleDateString("id-ID")}
+                {selectedDate.toLocaleDateString(
+                  "id-ID"
+                )}
               </p>
-
-              <div className="flex gap-6 mt-4 text-sm">
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-green-500 rounded-full"></div>
-                  <span>Tersedia</span>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-red-500 rounded-full"></div>
-                  <span>Disewa</span>
-                </div>
-              </div>
             </div>
 
+            {/* QUANTITY */}
             <div className="mt-8">
               <h2 className="font-bold mb-3">
                 Quantity
@@ -251,7 +190,11 @@ function ProductDetail() {
               <div className="flex items-center gap-4">
                 <button
                   onClick={() =>
-                    setQty(qty > 1 ? qty - 1 : 1)
+                    setQty(
+                      qty > 1
+                        ? qty - 1
+                        : 1
+                    )
                   }
                   className="bg-[#B2B2B2] px-4 py-2 rounded-lg"
                 >
@@ -263,7 +206,9 @@ function ProductDetail() {
                 </span>
 
                 <button
-                  onClick={() => setQty(qty + 1)}
+                  onClick={() =>
+                    setQty(qty + 1)
+                  }
                   className="bg-[#B2B2B2] px-4 py-2 rounded-lg"
                 >
                   +
@@ -271,16 +216,21 @@ function ProductDetail() {
               </div>
             </div>
 
+            {/* TOTAL */}
             <div className="mt-8">
               <h2 className="font-bold text-xl">
                 Total Harga
               </h2>
 
               <p className="text-3xl font-bold mt-2">
-                Rp {totalPrice.toLocaleString("id-ID")}
+                Rp{" "}
+                {totalPrice.toLocaleString(
+                  "id-ID"
+                )}
               </p>
             </div>
 
+            {/* BOOK */}
             <button
               onClick={() =>
                 navigate("/checkout", {
@@ -296,6 +246,7 @@ function ProductDetail() {
             >
               Booking Sekarang
             </button>
+
           </div>
 
         </div>

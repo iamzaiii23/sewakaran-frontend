@@ -49,9 +49,30 @@ class BarangController extends Controller
             'stok' => 'required|integer',
             'status' => 'required',
             'kategori' => 'required',
+            'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
-        $barang = Barang::create($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('gambar')) {
+
+            $file = $request->file('gambar');
+
+            $filename =
+                time() .
+                '_' .
+                $file->getClientOriginalName();
+
+            $file->move(
+                public_path('uploads'),
+                $filename
+            );
+
+            $data['gambar'] =
+                'uploads/' . $filename;
+        }
+
+        $barang = Barang::create($data);
 
         return response()->json([
             'success' => true,

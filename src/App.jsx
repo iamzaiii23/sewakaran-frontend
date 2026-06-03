@@ -17,6 +17,7 @@ import AdminPembayaran from "./pages/AdminPembayaran";
 import AdminStok from "./pages/AdminStok";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
+import AdminProtectedRoute from "./routes/AdminProtectedRoute";
 
 function App() {
   return (
@@ -58,43 +59,53 @@ function App() {
         element={<BundlingDetail />}
       />
 
+      {/* CHECKOUT */}
       <Route
         path="/checkout"
-        element={
-          <ProtectedRoute>
-            <Checkout />
-          </ProtectedRoute>
-        }
+        element={<Checkout />}
       />
 
+      {/* BOOKING STATUS */}
       <Route
         path="/booking-status"
-        element={
-          <ProtectedRoute>
-            <BookingStatus />
-          </ProtectedRoute>
-        }
+        element={<BookingStatus />}
       />
 
       {/* ADMIN */}
       <Route
         path="/admin"
-        element={<AdminDashboard />}
+        element={
+          <AdminProtectedRoute>
+            <AdminDashboard />
+          </AdminProtectedRoute>
+        }
       />
 
       <Route
         path="/admin/booking"
-        element={<AdminBooking />}
+        element={
+          <AdminProtectedRoute>
+            <AdminBooking />
+          </AdminProtectedRoute>
+        }
       />
 
       <Route
         path="/admin/pembayaran"
-        element={<AdminPembayaran />}
+        element={
+          <AdminProtectedRoute>
+            <AdminPembayaran />
+          </AdminProtectedRoute>
+        }
       />
 
       <Route
         path="/admin/stok"
-        element={<AdminStok />}
+        element={
+          <AdminProtectedRoute>
+            <AdminStok />
+          </AdminProtectedRoute>
+        }
       />
 
     </Routes>

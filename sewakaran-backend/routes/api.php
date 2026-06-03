@@ -1,12 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PenyewaController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\TransaksiController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\BarangController;
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BarangController;
+use App\Http\Controllers\PenyewaController;
+use App\Http\Controllers\TransaksiController;
+
+
+// =========================
+// TEST API
+// =========================
 Route::get('/test', function () {
     return response()->json([
         'success' => true,
@@ -18,31 +23,71 @@ Route::get('/test', function () {
 // =========================
 // LOGIN
 // =========================
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [
+    AuthController::class,
+    'login'
+]);
 
 
 // =========================
 // PUBLIC ROUTE
 // =========================
 
+// =========================
 // BARANG
-Route::get('/barang', [BarangController::class, 'index']);
-Route::get('/barang/search', [BarangController::class, 'search']);
-Route::get('/barang/{id}', [BarangController::class, 'show']);
-Route::get('/barang/{id}/unavailable-dates', [TransaksiController::class, 'unavailableDates']);
+// =========================
+
+// CRUD BARANG
+Route::apiResource(
+    'barang',
+    BarangController::class
+);
+
+// SEARCH BARANG
+Route::get(
+    '/barang/search',
+    [BarangController::class, 'search']
+);
+
+// TANGGAL TIDAK TERSEDIA
+Route::get(
+    '/barang/{id}/unavailable-dates',
+    [TransaksiController::class, 'unavailableDates']
+);
 
 
+// =========================
 // PENYEWA
+// =========================
 // sementara public buat testing
-Route::apiResource('penyewa', PenyewaController::class);
+Route::apiResource(
+    'penyewa',
+    PenyewaController::class
+);
 
 
+// =========================
 // TRANSAKSI / BOOKING
-Route::apiResource('transaksi', TransaksiController::class);
+// =========================
+Route::apiResource(
+    'transaksi',
+    TransaksiController::class
+);
 
-Route::post('/transaksi/{id}/approve',[TransaksiController::class, 'approve']);
 
-Route::post('/transaksi/{id}/reject',[TransaksiController::class, 'reject']);
+// APPROVE PEMBAYARAN
+Route::post(
+    '/transaksi/{id}/approve',
+    [TransaksiController::class, 'approve']
+);
+
+
+// REJECT PEMBAYARAN
+Route::post(
+    '/transaksi/{id}/reject',
+    [TransaksiController::class, 'reject']
+);
+
 
 // UPLOAD BUKTI PEMBAYARAN
 Route::post(
@@ -56,13 +101,13 @@ Route::post(
 // =========================
 Route::middleware('auth:sanctum')->group(function () {
 
-    // logout
-    Route::post('/logout', [
-        AuthController::class,
-        'logout'
-    ]);
+    // LOGOUT
+    Route::post(
+        '/logout',
+        [AuthController::class, 'logout']
+    );
 
-    // admin
+    // CRUD ADMIN
     Route::apiResource(
         'admin',
         AdminController::class

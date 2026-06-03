@@ -1,16 +1,56 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+
 import { useAuth } from "../context/AuthContext";
 
 function Login() {
   const { login, user } = useAuth();
   const navigate = useNavigate();
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loadingAdmin, setLoadingAdmin] = useState(false);
+
   useEffect(() => {
     if (user) {
       navigate("/dashboard");
     }
   }, [user, navigate]);
+
+  const handleAdminLogin = async () => {
+    try {
+      setLoadingAdmin(true);
+
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/login",
+        {
+          email,
+          password,
+        }
+      );
+
+      localStorage.setItem(
+        "admin_token",
+        response.data.token
+      );
+
+      localStorage.setItem(
+        "admin_data",
+        JSON.stringify(response.data.data)
+      );
+
+      navigate("/admin");
+
+    } catch (error) {
+      alert(
+        error.response?.data?.message ||
+        "Login gagal"
+      );
+    } finally {
+      setLoadingAdmin(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#DEDEDE] flex items-center justify-center p-4">
@@ -23,6 +63,7 @@ function Login() {
             <h1 className="text-4xl font-bold text-white">
               Sewakaran
             </h1>
+
             <p className="text-white text-sm mt-2">
               Borrowing Services
             </p>
@@ -32,7 +73,6 @@ function Login() {
         {/* CONTENT */}
         <div className="p-8">
 
-          {/* TAB */}
           <div className="flex justify-center gap-8 mb-8">
             <button className="text-blue-500 border-b-2 border-blue-500 pb-1">
               Login
@@ -43,20 +83,28 @@ function Login() {
             </button>
           </div>
 
-          {/* INPUT (UI only) */}
+          {/* EMAIL */}
           <input
             type="email"
             placeholder="Email Address"
+            value={email}
+            onChange={(e) =>
+              setEmail(e.target.value)
+            }
             className="w-full border-b border-gray-300 py-3 mb-5 outline-none"
           />
 
+          {/* PASSWORD */}
           <input
             type="password"
             placeholder="Password"
+            value={password}
+            onChange={(e) =>
+              setPassword(e.target.value)
+            }
             className="w-full border-b border-gray-300 py-3 mb-5 outline-none"
           />
 
-          {/* OPTIONS */}
           <div className="flex justify-between text-sm mb-6">
             <label className="flex items-center gap-2 text-gray-600">
               <input type="checkbox" />
@@ -68,7 +116,18 @@ function Login() {
             </span>
           </div>
 
-          {/* LOGIN BUTTON (Google Auth) */}
+          {/* LOGIN ADMIN */}
+          <button
+            onClick={handleAdminLogin}
+            disabled={loadingAdmin}
+            className="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg transition mb-4"
+          >
+            {loadingAdmin
+              ? "Loading..."
+              : "Login Admin"}
+          </button>
+
+          {/* LOGIN GOOGLE */}
           <button
             onClick={login}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition"
@@ -76,7 +135,7 @@ function Login() {
             Login with Google
           </button>
 
-          {/* GOOGLE ICON LOGIN */}
+          {/* GOOGLE ICON */}
           <div className="mt-8 text-center">
 
             <p className="text-gray-500 mb-4">
@@ -96,7 +155,6 @@ function Login() {
 
           </div>
 
-          {/* USER INFO */}
           {user && (
             <div className="mt-8 text-center">
 

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -9,15 +10,16 @@ import heroImage from "../assets/logo-sewakaran.jpeg";
 
 import handieTalkie from "../assets/handie-talkie.jpeg";
 import soundSystem from "../assets/sound-system.jpeg";
-import tripod from "../assets/tripod.jpeg";
-import stand from "../assets/stand.jpeg";
-import mic from "../assets/mic.jpeg";
+import tripod from "../assets/Tripod.jpeg";
+import stand from "../assets/Stand.jpeg";
+import mic from "../assets/Mic.jpeg";
 import earphone from "../assets/earphone-ht.jpeg";
-import chargerSystem from "../assets/charger-system.jpeg";
+import charger from "../assets/charger-system.jpeg";
 
 function Home() {
   const [products, setProducts] = useState([]);
   const [activeTab, setActiveTab] = useState("barang");
+  const [loading, setLoading] = useState(true);
 
   const bundlings = [
     {
@@ -38,68 +40,49 @@ function Home() {
     },
   ];
 
-  useEffect(() => {
-    const dummyProducts = [
-      {
-        id: 1,
-        title: "Handie Talkie",
-        price12h: 8000,
-        price24h: 12000,
-        image: handieTalkie,
-        status: "Tersedia",
-      },
-      {
-        id: 2,
-        title: "Sound System",
-        price12h: 25000,
-        price24h: 40000,
-        image: soundSystem,
-        status: "Tersedia",
-      },
-      {
-        id: 3,
-        title: "Tripod",
-        price12h: 8000,
-        price24h: 13000,
-        image: tripod,
-        status: "Tersedia",
-      },
-      {
-        id: 4,
-        title: "Stand",
-        price12h: 10000,
-        price24h: 15000,
-        image: stand,
-        status: "Disewa",
-      },
-      {
-        id: 5,
-        title: "Mic Wireless",
-        price12h: 10000,
-        price24h: 15000,
-        image: mic,
-        status: "Tersedia",
-      },
-      {
-        id: 6,
-        title: "Earphone HT",
-        price12h: 0,
-        price24h: 3000,
-        image: earphone,
-        status: "Tersedia",
-      },
-      {
-        id: 7,
-        title: "Charger System",
-        price12h: 3000,
-        price24h: 5000,
-        image: chargerSystem,
-        status: "Tersedia",
-      },
-    ];
+  const imageMap = {
+    "Handie Talkie": handieTalkie,
+    "Sound System": soundSystem,
+    "Tripod": tripod,
+    "Stand": stand,
+    "Mic Wireless": mic,
+    "Earphone HT": earphone,
+    "Charger System": charger,
+  };
 
-    setProducts(dummyProducts);
+  useEffect(() => {
+    fetchProducts();
   }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/barang"
+      );
+
+      const dataBarang = response.data.data.map((item) => ({
+        id: item.id_barang,
+        title: item.nama_barang,
+        price12h: item.harga_12_jam,
+        price24h: item.harga_24_jam,
+
+        image:
+          imageMap[item.nama_barang] ||
+          heroImage,
+
+        status:
+          item.status === "tersedia"
+            ? "Tersedia"
+            : "Disewa",
+      }));
+
+      setProducts(dataBarang);
+    } catch (error) {
+      console.error("Gagal ambil data barang:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="bg-[#DEDEDE] min-h-screen">
@@ -162,14 +145,20 @@ function Home() {
       {/* PRODUK */}
       {activeTab === "barang" && (
         <section className="max-w-7xl mx-auto px-4 md:px-6 pb-20">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-            {products.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-              />
-            ))}
-          </div>
+          {loading ? (
+            <div className="text-center text-xl font-semibold">
+              Loading...
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+              {products.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                />
+              ))}
+            </div>
+          )}
         </section>
       )}
 

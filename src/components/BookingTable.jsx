@@ -1,8 +1,10 @@
 function BookingTable({ bookings = [], onActionClick }) {
   const statusMap = {
-    Pending: "bg-yellow-500",
-    Disetujui: "bg-green-500",
-    Ditolak: "bg-red-500",
+    pending: "bg-yellow-500",
+    approved: "bg-green-500",
+    dibayar: "bg-green-500",
+    rejected: "bg-red-500",
+    dibatalkan: "bg-red-500",
   };
 
   return (
