@@ -28,6 +28,11 @@ Route::post('/login', [
     'login'
 ]);
 
+Route::post('/register', [
+    AuthController::class,
+    'register'
+]);
+
 
 // =========================
 // PUBLIC ROUTE

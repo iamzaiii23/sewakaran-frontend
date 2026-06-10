@@ -3,6 +3,8 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 
+import qrisImage from "../assets/QRIS_Payment.jpeg";
+
 function Checkout() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -11,9 +13,14 @@ function Checkout() {
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [paymentProof, setPaymentProof] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [paid, setPaid] = useState(false);
+  const [paymentProof, setPaymentProof] =
+    useState(null);
+
+  const [loading, setLoading] =
+    useState(false);
+
+  const [paid, setPaid] =
+    useState(false);
 
   if (!bookingData) {
     return (
@@ -35,16 +42,21 @@ function Checkout() {
     qty,
     selectedDate,
     totalPrice,
+    selectedDuration,
   } = bookingData;
 
   const handleSubmit = async () => {
     if (!name || !phone) {
-      toast.error("Lengkapi data");
+      toast.error(
+        "Lengkapi data"
+      );
       return;
     }
 
     if (!paymentProof) {
-      toast.error("Upload bukti pembayaran");
+      toast.error(
+        "Upload bukti pembayaran"
+      );
       return;
     }
 
@@ -55,13 +67,14 @@ function Checkout() {
       // 1. BUAT PENYEWA
       // ======================
 
-      const penyewaRes = await axios.post(
-        "http://127.0.0.1:8000/api/penyewa",
-        {
-          nama_penyewa: name,
-          no_hp: phone,
-        }
-      );
+      const penyewaRes =
+        await axios.post(
+          "http://127.0.0.1:8000/api/penyewa",
+          {
+            nama_penyewa: name,
+            no_hp: phone,
+          }
+        );
 
       const idPenyewa =
         penyewaRes.data.data.id_penyewa;
@@ -70,31 +83,49 @@ function Checkout() {
       // 2. BUAT TRANSAKSI
       // ======================
 
-      const transaksiRes = await axios.post(
-        "http://127.0.0.1:8000/api/transaksi",
-        {
-          id_barang: product.id_barang,
-          id_penyewa: idPenyewa,
+      const transaksiRes =
+        await axios.post(
+          "http://127.0.0.1:8000/api/transaksi",
+          {
+            id_barang:
+              product.id_barang,
 
-          tanggal_sewa:
-            selectedDate.toISOString().split("T")[0],
+            id_penyewa:
+              idPenyewa,
 
-          tanggal_kembali:
-            selectedDate.toISOString().split("T")[0],
+            tanggal_sewa:
+              selectedDate
+                .toISOString()
+                .split("T")[0],
 
-          jumlah: qty,
-          total_bayar: totalPrice,
-        }
-      );
+            tanggal_kembali:
+              selectedDate
+                .toISOString()
+                .split("T")[0],
+
+            jumlah: qty,
+
+            durasi_sewa:
+              selectedDuration,
+
+            total_bayar:
+              totalPrice,
+
+            status:
+              "menunggu_verifikasi",
+          }
+        );
 
       const idTransaksi =
-        transaksiRes.data.data.id_transaksi;
+        transaksiRes.data.data
+          .id_transaksi;
 
       // ======================
       // 3. UPLOAD BUKTI
       // ======================
 
-      const formData = new FormData();
+      const formData =
+        new FormData();
 
       formData.append(
         "bukti_pembayaran",
@@ -115,17 +146,24 @@ function Checkout() {
       setPaid(true);
 
       toast.success(
-        "Booking berhasil"
+        "Pembayaran berhasil! Menunggu verifikasi admin"
       );
 
-      navigate("/booking-status");
-
+      navigate(
+        "/booking-status",
+        {
+          state: {
+            success: true,
+          },
+        }
+      );
     } catch (error) {
       console.error(error);
 
       toast.error(
-        error?.response?.data?.message ||
-        "Booking gagal"
+        error?.response?.data
+          ?.message ||
+          "Booking gagal"
       );
     } finally {
       setLoading(false);
@@ -135,44 +173,50 @@ function Checkout() {
   return (
     <div className="min-h-screen bg-[#DEDEDE] p-6">
 
-      <div className="max-w-md mx-auto bg-white rounded-2xl p-5">
+      <div className="max-w-md mx-auto bg-white rounded-2xl p-5 shadow-lg">
 
-        <h1 className="text-2xl font-bold mb-4">
+        <h1 className="text-3xl font-bold mb-5">
           Checkout
         </h1>
 
+        {/* INPUT */}
         <input
           className="w-full p-3 bg-gray-100 rounded mb-3"
           placeholder="Nama"
           value={name}
           onChange={(e) =>
-            setName(e.target.value)
+            setName(
+              e.target.value
+            )
           }
         />
 
         <input
-          className="w-full p-3 bg-gray-100 rounded mb-3"
+          className="w-full p-3 bg-gray-100 rounded mb-4"
           placeholder="No WhatsApp"
           value={phone}
           onChange={(e) =>
-            setPhone(e.target.value)
+            setPhone(
+              e.target.value
+            )
           }
         />
 
-        <div className="border p-3 rounded mb-3">
+        {/* DETAIL BOOKING */}
+        <div className="border p-4 rounded-xl mb-4">
 
-          <p className="font-semibold">
+          <p className="font-semibold text-lg">
             {product.nama_barang}
           </p>
 
-          <p className="font-bold text-blue-600">
+          <p className="font-bold text-blue-600 text-xl">
             Rp{" "}
             {totalPrice.toLocaleString(
               "id-ID"
             )}
           </p>
 
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 mt-2">
             Tanggal:
             {" "}
             {selectedDate.toLocaleDateString(
@@ -186,27 +230,91 @@ function Checkout() {
             {qty}
           </p>
 
+          <p className="text-sm text-gray-500">
+            Durasi:
+            {" "}
+            {selectedDuration} Jam
+          </p>
+
         </div>
 
-        <input
-          type="file"
-          onChange={(e) =>
-            setPaymentProof(
-              e.target.files[0]
-            )
-          }
-        />
+        {/* QRIS */}
+        <div className="border rounded-xl p-4 bg-gray-50 mb-4">
 
+          <h2 className="font-bold text-lg">
+            Pembayaran QRIS
+          </h2>
+
+          <p className="text-sm text-gray-500">
+            Scan QRIS lalu upload bukti pembayaran
+          </p>
+
+          <div className="flex justify-center mt-4">
+            <img
+              src={qrisImage}
+              alt="QRIS Payment"
+              className="w-56 rounded-xl border"
+            />
+          </div>
+
+          <div className="text-center mt-4">
+            <p className="text-gray-500">
+              Total Bayar
+            </p>
+
+            <p className="text-2xl font-bold text-green-600">
+              Rp{" "}
+              {totalPrice.toLocaleString(
+                "id-ID"
+              )}
+            </p>
+          </div>
+
+        </div>
+
+        {/* UPLOAD */}
+        <div className="mb-4">
+
+          <label className="font-medium block mb-2">
+            Upload Bukti Pembayaran
+          </label>
+
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) =>
+              setPaymentProof(
+                e.target.files[0]
+              )
+            }
+            className="w-full"
+          />
+
+          {paymentProof && (
+            <p className="text-sm text-green-600 mt-2">
+              File:
+              {" "}
+              {
+                paymentProof.name
+              }
+            </p>
+          )}
+
+        </div>
+
+        {/* BUTTON */}
         <button
           onClick={handleSubmit}
-          disabled={loading || paid}
-          className="w-full mt-4 bg-[#B2B2B2] text-white py-3 rounded-xl"
+          disabled={
+            loading || paid
+          }
+          className="w-full bg-[#B2B2B2] hover:bg-[#8f8f8f] text-white py-4 rounded-xl transition"
         >
           {loading
-            ? "Loading..."
+            ? "Memproses..."
             : paid
             ? "Sudah Dibayar"
-            : "Konfirmasi"}
+            : "Konfirmasi Pembayaran"}
         </button>
 
       </div>

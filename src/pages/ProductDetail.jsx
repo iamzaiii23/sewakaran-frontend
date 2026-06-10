@@ -5,49 +5,96 @@ import axios from "axios";
 
 import "react-calendar/dist/Calendar.css";
 
+// IMPORT IMAGE
+import handieTalkie from "../assets/handie-talkie.jpeg";
+import earphoneHt from "../assets/earphone-ht.jpeg";
+import chargerSystem from "../assets/charger-system.jpeg";
+import soundSystem from "../assets/sound-system.jpeg";
+import tripod from "../assets/Tripod.jpeg";
+import mic from "../assets/Mic.jpeg";
+
 function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [product, setProduct] = useState(null);
-  const [bookedDates, setBookedDates] = useState([]);
+  const [product, setProduct] =
+    useState(null);
 
-  const [qty, setQty] = useState(1);
+  const [bookedDates, setBookedDates] =
+    useState([]);
+
+  const [qty, setQty] =
+    useState(1);
+
   const [selectedDate, setSelectedDate] =
     useState(new Date());
 
-  const [loading, setLoading] = useState(true);
+  const [selectedDuration,
+    setSelectedDuration] =
+    useState(12);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  // IMAGE MAPPING
+  const imageMap = {
+    "Handie Talkie":
+      handieTalkie,
+
+    "Earphone HT":
+      earphoneHt,
+
+    "Charger System":
+      chargerSystem,
+
+    "Sound System":
+      soundSystem,
+
+    "Tripod":
+      tripod,
+
+    "Mic Wireless":
+      mic,
+  };
 
   useEffect(() => {
     fetchProduct();
     fetchUnavailableDates();
   }, [id]);
 
-  const fetchProduct = async () => {
-    try {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/api/barang/${id}`
-      );
+  const fetchProduct =
+    async () => {
+      try {
+        const response =
+          await axios.get(
+            `http://127.0.0.1:8000/api/barang/${id}`
+          );
 
-      setProduct(response.data.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+        setProduct(
+          response.data.data
+        );
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-  const fetchUnavailableDates = async () => {
-    try {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/api/barang/${id}/unavailable-dates`
-      );
+  const fetchUnavailableDates =
+    async () => {
+      try {
+        const response =
+          await axios.get(
+            `http://127.0.0.1:8000/api/barang/${id}/unavailable-dates`
+          );
 
-      setBookedDates(response.data.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+        setBookedDates(
+          response.data.data
+        );
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
   if (loading) {
     return (
@@ -62,106 +109,216 @@ function ProductDetail() {
   if (!product) {
     return (
       <div className="min-h-screen flex items-center justify-center flex-col">
+
         <h1 className="text-2xl font-bold">
           Produk tidak ditemukan
         </h1>
 
         <button
-          onClick={() => navigate("/")}
+          onClick={() =>
+            navigate("/")
+          }
           className="mt-4 bg-gray-800 text-white px-5 py-2 rounded-xl"
         >
           Kembali ke Home
         </button>
+
       </div>
     );
   }
 
+  // TOTAL HARGA
   const totalPrice =
-    qty * product.harga_24_jam;
+    qty *
+    (
+      selectedDuration === 12
+        ? product.harga_12_jam
+        : product.harga_24_jam
+    );
 
   return (
     <div className="min-h-screen bg-[#DEDEDE] py-10 px-4">
+
       <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-lg p-8">
+
         <div className="grid md:grid-cols-2 gap-10">
 
           {/* IMAGE */}
           <div className="flex items-center justify-center bg-white rounded-3xl p-6">
+
             <img
-              src={`http://127.0.0.1:8000/images/${product.gambar}`}
-              alt={product.nama_barang}
+              src={
+                imageMap[
+                  product.nama_barang
+                ] || handieTalkie
+              }
+              alt={
+                product.nama_barang
+              }
               className="max-h-[400px] max-w-full object-contain"
             />
+
           </div>
 
           {/* DETAIL */}
           <div>
 
             <h1 className="text-4xl font-bold text-gray-800">
-              {product.nama_barang}
+              {
+                product.nama_barang
+              }
             </h1>
 
             <p className="text-gray-600 mt-2">
-              {product.deskripsi}
+              {
+                product.deskripsi
+              }
             </p>
 
-            {/* HARGA */}
-            <div className="mt-4">
-              <p className="text-green-700 font-bold text-xl">
-                12 Jam :
-                {product.harga_12_jam === 0
-                  ? " Free"
-                  : ` Rp ${product.harga_12_jam.toLocaleString("id-ID")}`}
-              </p>
+            {/* DURASI */}
+            <div className="mt-6">
 
-              <p className="text-gray-700 text-lg">
-                24 Jam :
-                {" "}
-                Rp{" "}
-                {product.harga_24_jam.toLocaleString(
-                  "id-ID"
-                )}
-              </p>
+              <h2 className="font-bold text-lg mb-3">
+                Pilih Durasi Sewa
+              </h2>
+
+              <div className="flex gap-3">
+
+                {/* 12 JAM */}
+                <button
+                  onClick={() =>
+                    setSelectedDuration(12)
+                  }
+                  className={`flex-1 p-4 rounded-2xl border transition text-left ${
+                    selectedDuration === 12
+                      ? "bg-green-600 text-white border-green-600"
+                      : "bg-white border-gray-300"
+                  }`}
+                >
+                  <p className="font-bold text-lg">
+                    12 Jam
+                  </p>
+
+                  <p>
+                    {
+                      product.harga_12_jam === 0
+                        ? "Free"
+                        : `Rp ${product.harga_12_jam.toLocaleString("id-ID")}`
+                    }
+                  </p>
+
+                </button>
+
+                {/* 24 JAM */}
+                <button
+                  onClick={() =>
+                    setSelectedDuration(24)
+                  }
+                  className={`flex-1 p-4 rounded-2xl border transition text-left ${
+                    selectedDuration === 24
+                      ? "bg-green-600 text-white border-green-600"
+                      : "bg-white border-gray-300"
+                  }`}
+                >
+                  <p className="font-bold text-lg">
+                    24 Jam
+                  </p>
+
+                  <p>
+                    Rp{" "}
+                    {
+                      product.harga_24_jam.toLocaleString(
+                        "id-ID"
+                      )
+                    }
+                  </p>
+
+                </button>
+
+              </div>
+
             </div>
 
             {/* SPESIFIKASI */}
             <div className="mt-8">
+
               <h2 className="font-bold text-2xl mb-4">
                 Spesifikasi
               </h2>
 
               <div className="grid grid-cols-2 gap-2">
+
                 {Object.entries(
                   product.spesifikasi || {}
-                ).map(([key, value]) => (
-                  <div
-                    key={key}
-                    className="bg-[#DEDEDE] p-3 rounded-xl text-sm"
-                  >
-                    <p className="font-bold">
-                      {key}
-                    </p>
+                ).map(
+                  ([key, value]) => (
+                    <div
+                      key={key}
+                      className="bg-[#DEDEDE] p-3 rounded-xl text-sm"
+                    >
+                      <p className="font-bold">
+                        {key}
+                      </p>
 
-                    <p>{value}</p>
-                  </div>
-                ))}
+                      <p>
+                        {value}
+                      </p>
+                    </div>
+                  )
+                )}
+
               </div>
+
+            </div>
+
+            {/* KETERSEDIAAN */}
+            <div className="mt-8">
+
+              <h2 className="font-bold text-lg">
+                Ketersediaan Barang
+              </h2>
+
+              <p
+                className={`font-semibold mt-1 ${
+                  product.stok > 0
+                    ? "text-green-600"
+                    : "text-red-600"
+                }`}
+              >
+                {
+                  product.stok > 0
+                    ? `${product.stok} tersedia`
+                    : "Stok Habis"
+                }
+              </p>
+
             </div>
 
             {/* CALENDAR */}
             <div className="mt-8">
+
               <h2 className="font-bold text-xl mb-4">
                 Kalender Ketersediaan
               </h2>
 
               <div className="border rounded-2xl p-4">
+
                 <Calendar
-                  onChange={setSelectedDate}
-                  value={selectedDate}
-                  tileClassName={({ date }) => {
+                  onChange={
+                    setSelectedDate
+                  }
+                  value={
+                    selectedDate
+                  }
+                  tileClassName={({
+                    date,
+                  }) => {
                     const formatted =
                       date
                         .toISOString()
-                        .split("T")[0];
+                        .split(
+                          "T"
+                        )[0];
 
                     return bookedDates.includes(
                       formatted
@@ -170,24 +327,31 @@ function ProductDetail() {
                       : null;
                   }}
                 />
+
               </div>
 
               <p className="mt-4 font-semibold">
-                Tanggal dipilih :
+                Tanggal dipilih:
                 {" "}
-                {selectedDate.toLocaleDateString(
-                  "id-ID"
-                )}
+                {
+                  selectedDate.toLocaleDateString(
+                    "id-ID"
+                  )
+                }
               </p>
+
             </div>
 
             {/* QUANTITY */}
             <div className="mt-8">
+
               <h2 className="font-bold mb-3">
                 Quantity
               </h2>
 
               <div className="flex items-center gap-4">
+
+                {/* MINUS */}
                 <button
                   onClick={() =>
                     setQty(
@@ -205,52 +369,89 @@ function ProductDetail() {
                   {qty}
                 </span>
 
+                {/* PLUS */}
                 <button
-                  onClick={() =>
-                    setQty(qty + 1)
-                  }
+                  onClick={() => {
+                    if (
+                      qty <
+                      product.stok
+                    ) {
+                      setQty(
+                        qty + 1
+                      );
+                    } else {
+                      alert(
+                        "Jumlah melebihi stok tersedia"
+                      );
+                    }
+                  }}
                   className="bg-[#B2B2B2] px-4 py-2 rounded-lg"
                 >
                   +
                 </button>
+
               </div>
+
             </div>
 
             {/* TOTAL */}
             <div className="mt-8">
+
               <h2 className="font-bold text-xl">
                 Total Harga
               </h2>
 
               <p className="text-3xl font-bold mt-2">
                 Rp{" "}
-                {totalPrice.toLocaleString(
-                  "id-ID"
-                )}
+                {
+                  totalPrice.toLocaleString(
+                    "id-ID"
+                  )
+                }
               </p>
+
             </div>
 
             {/* BOOK */}
             <button
-              onClick={() =>
-                navigate("/checkout", {
-                  state: {
-                    product,
-                    qty,
-                    selectedDate,
-                    totalPrice,
-                  },
-                })
+              disabled={
+                product.stok === 0 ||
+                qty >
+                  product.stok
               }
-              className="mt-8 w-full bg-[#B2B2B2] hover:bg-[#8f8f8f] text-white py-4 rounded-2xl font-semibold transition"
+              onClick={() =>
+                navigate(
+                  "/checkout",
+                  {
+                    state: {
+                      product,
+                      qty,
+                      selectedDate,
+                      selectedDuration,
+                      totalPrice,
+                    },
+                  }
+                )
+              }
+              className={`mt-8 w-full py-4 rounded-2xl font-semibold transition ${
+                product.stok === 0
+                  ? "bg-gray-400 cursor-not-allowed text-white"
+                  : "bg-[#B2B2B2] hover:bg-[#8f8f8f] text-white"
+              }`}
             >
-              Booking Sekarang
+              {
+                product.stok === 0
+                  ? "Stok Habis"
+                  : "Booking Sekarang"
+              }
             </button>
 
           </div>
 
         </div>
+
       </div>
+
     </div>
   );
 }

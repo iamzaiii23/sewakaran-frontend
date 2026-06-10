@@ -1,16 +1,62 @@
 import { Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
 import { useState, useEffect } from "react";
 
 function Navbar() {
-  const { user, logout } = useAuth();
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] =
+    useState(false);
+
+  const [user, setUser] =
+    useState(null);
 
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "auto";
+
+    const userData =
+      localStorage.getItem(
+        "user_data"
+      );
+
+    if (userData) {
+      setUser(
+        JSON.parse(
+          userData
+        )
+      );
+    }
+
+  }, []);
+
+  const handleLogout =
+    () => {
+
+      localStorage.removeItem(
+        "user_data"
+      );
+
+      localStorage.removeItem(
+        "user_token"
+      );
+
+      localStorage.removeItem(
+        "admin_data"
+      );
+
+      localStorage.removeItem(
+        "admin_token"
+      );
+
+      window.location.href =
+        "/";
+    };
+
+  useEffect(() => {
+    document.body.style.overflow =
+      menuOpen
+        ? "hidden"
+        : "auto";
 
     return () => {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow =
+        "auto";
     };
   }, [menuOpen]);
 
@@ -25,7 +71,11 @@ function Navbar() {
           {/* LOGO */}
           <Link
             to="/"
-            onClick={() => setMenuOpen(false)}
+            onClick={() =>
+              setMenuOpen(
+                false
+              )
+            }
             className="text-xl md:text-2xl font-bold text-white"
           >
             Sewakaran
@@ -34,23 +84,35 @@ function Navbar() {
           {/* DESKTOP MENU */}
           <div className="hidden md:flex items-center gap-6">
 
-            <Link to="/" className="text-white hover:text-gray-300 transition">
+            <Link
+              to="/"
+              className="text-white hover:text-gray-300 transition"
+            >
               Home
             </Link>
 
-            <Link to="/about" className="text-white hover:text-gray-300 transition">
+            <Link
+              to="/about"
+              className="text-white hover:text-gray-300 transition"
+            >
               About
             </Link>
 
+            {/* USER MENU */}
             {user && (
               <>
-                <Link to="/dashboard" className="text-white hover:text-gray-300 transition">
-                  Dashboard
-                </Link>
-
-                <Link to="/booking-status" className="text-white hover:text-gray-300 transition">
+                <Link
+                  to="/booking-status"
+                  className="text-white hover:text-gray-300 transition"
+                >
                   Booking
                 </Link>
+
+                <span className="text-gray-300">
+                  Hi,{" "}
+                  {user.username ||
+                    user.name}
+                </span>
               </>
             )}
 
@@ -63,8 +125,10 @@ function Navbar() {
               </Link>
             ) : (
               <button
-                onClick={logout}
-                className="bg-white text-gray-800 px-4 py-2 rounded-xl hover:bg-gray-100 transition"
+                onClick={
+                  handleLogout
+                }
+                className="bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-600 transition"
               >
                 Logout
               </button>
@@ -74,10 +138,16 @@ function Navbar() {
 
           {/* MOBILE BUTTON */}
           <button
-            onClick={() => setMenuOpen(!menuOpen)}
+            onClick={() =>
+              setMenuOpen(
+                !menuOpen
+              )
+            }
             className="md:hidden text-white text-3xl"
           >
-            {menuOpen ? "✕" : "☰"}
+            {menuOpen
+              ? "✕"
+              : "☰"}
           </button>
 
         </div>
@@ -86,14 +156,20 @@ function Navbar() {
         {menuOpen && (
           <div
             className="fixed inset-0 bg-black/40 md:hidden"
-            onClick={() => setMenuOpen(false)}
+            onClick={() =>
+              setMenuOpen(
+                false
+              )
+            }
           />
         )}
 
         {/* MOBILE MENU */}
         <div
           className={`md:hidden overflow-hidden transition-all duration-300 relative z-50 ${
-            menuOpen ? "max-h-96 mt-4" : "max-h-0"
+            menuOpen
+              ? "max-h-96 mt-4"
+              : "max-h-0"
           }`}
         >
           <div className="bg-white rounded-2xl p-4 shadow-lg">
@@ -102,7 +178,11 @@ function Navbar() {
 
               <Link
                 to="/"
-                onClick={() => setMenuOpen(false)}
+                onClick={() =>
+                  setMenuOpen(
+                    false
+                  )
+                }
                 className="text-gray-700 font-medium"
               >
                 Home
@@ -110,7 +190,11 @@ function Navbar() {
 
               <Link
                 to="/about"
-                onClick={() => setMenuOpen(false)}
+                onClick={() =>
+                  setMenuOpen(
+                    false
+                  )
+                }
                 className="text-gray-700 font-medium"
               >
                 About
@@ -119,27 +203,33 @@ function Navbar() {
               {user && (
                 <>
                   <Link
-                    to="/dashboard"
-                    onClick={() => setMenuOpen(false)}
-                    className="text-gray-700 font-medium"
-                  >
-                    Dashboard
-                  </Link>
-
-                  <Link
                     to="/booking-status"
-                    onClick={() => setMenuOpen(false)}
+                    onClick={() =>
+                      setMenuOpen(
+                        false
+                      )
+                    }
                     className="text-gray-700 font-medium"
                   >
                     Booking
                   </Link>
+
+                  <p className="text-gray-500">
+                    Hi,{" "}
+                    {user.username ||
+                      user.name}
+                  </p>
                 </>
               )}
 
               {!user ? (
                 <Link
                   to="/login"
-                  onClick={() => setMenuOpen(false)}
+                  onClick={() =>
+                    setMenuOpen(
+                      false
+                    )
+                  }
                   className="bg-gray-900 text-white text-center py-2 rounded-xl"
                 >
                   Login
@@ -147,10 +237,12 @@ function Navbar() {
               ) : (
                 <button
                   onClick={() => {
-                    logout();
-                    setMenuOpen(false);
+                    handleLogout();
+                    setMenuOpen(
+                      false
+                    );
                   }}
-                  className="bg-gray-900 text-white py-2 rounded-xl"
+                  className="bg-red-500 text-white py-2 rounded-xl"
                 >
                   Logout
                 </button>

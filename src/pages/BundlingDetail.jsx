@@ -10,44 +10,85 @@ function BundlingDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [quantity, setQuantity] = useState(1);
-  const [date, setDate] = useState(new Date());
-  const [duration, setDuration] = useState(12);
+  const [quantity, setQuantity] =
+    useState(1);
+
+  const [selectedDate, setSelectedDate] =
+    useState(new Date());
+
+  const [selectedDuration,
+    setSelectedDuration] =
+    useState(12);
 
   const bundles = useMemo(
     () => ({
       1: {
         id: 1,
-        title: "Bundle Audio",
-        description: "Sound System, Stand, Mic",
-        price12: 30000,
-        price24: 50000,
-        image: soundSystem,
-        specifications: [
-          "Frequency Range",
-          "UHF 400-438MHz",
-          "RF Rated Power 2W",
-        ],
+        nama_barang:
+          "Bundle Audio",
+
+        deskripsi:
+          "Sound System, Stand, Mic",
+
+        harga_12_jam:
+          30000,
+
+        harga_24_jam:
+          50000,
+
+        image:
+          soundSystem,
+
+        stok: 3,
+
+        spesifikasi: {
+          Speaker:
+            "Sound System",
+
+          Stand:
+            "Mic Stand",
+
+          Mic:
+            "Wireless Mic",
+        },
       },
 
       2: {
         id: 2,
-        title: "Bundle Komunikasi",
-        description: "HT, Earphone, Charger",
-        price12: 10000,
-        price24: 15000,
-        image: handieTalkie,
-        specifications: [
-          "Frequency Range",
-          "UHF 400-438MHz",
-          "RF Rated Power 2W",
-        ],
+        nama_barang:
+          "Bundle Komunikasi",
+
+        deskripsi:
+          "HT, Earphone, Charger",
+
+        harga_12_jam:
+          10000,
+
+        harga_24_jam:
+          15000,
+
+        image:
+          handieTalkie,
+
+        stok: 5,
+
+        spesifikasi: {
+          HT:
+            "Handie Talkie",
+
+          Earphone:
+            "Earphone HT",
+
+          Charger:
+            "Fast Charger",
+        },
       },
     }),
     []
   );
 
-  const bundle = bundles[id];
+  const bundle =
+    bundles[id];
 
   if (!bundle) {
     return (
@@ -59,207 +100,374 @@ function BundlingDetail() {
     );
   }
 
-  const unavailableDates = useMemo(
-    () => [
-      "2026-06-10",
-      "2026-06-11",
-      "2026-06-18",
-      "2026-06-25",
-    ],
-    []
-  );
+  // TANGGAL TIDAK TERSEDIA
+  const unavailableDates =
+    useMemo(
+      () => [
+        "2026-06-10",
+        "2026-06-11",
+        "2026-06-18",
+        "2026-06-25",
+      ],
+      []
+    );
 
-  const formatDate = (d) => {
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
+  const formatDate =
+    (date) => {
+      return date
+        .toISOString()
+        .split("T")[0];
+    };
 
-    return `${year}-${month}-${day}`;
-  };
+  const tileClassName =
+    ({ date }) => {
+      const formatted =
+        formatDate(date);
 
-  const tileClassName = ({ date }) =>
-    unavailableDates.includes(formatDate(date))
-      ? "bg-red-500 text-white rounded-full"
-      : null;
+      return unavailableDates.includes(
+        formatted
+      )
+        ? "bg-red-500 text-white rounded-full"
+        : null;
+    };
 
-  const tileDisabled = ({ date }) =>
-    unavailableDates.includes(formatDate(date));
-
-  const pricePerUnit =
-    duration === 24
-      ? bundle.price24
-      : bundle.price12;
-
-  const totalPrice =
-    pricePerUnit * quantity;
-
-  const handleBooking = () => {
-    const endDate = new Date(date);
-
-    if (duration === 24) {
-      endDate.setDate(
-        endDate.getDate() + 1
+  const tileDisabled =
+    ({ date }) =>
+      unavailableDates.includes(
+        formatDate(date)
       );
-    }
 
-    navigate("/checkout", {
-      state: {
-        product: {
-          id: bundle.id,
-          title: `${bundle.title} - ${bundle.description}`,
-          image: bundle.image,
-          price: pricePerUnit,
-        },
-        qty: quantity,
-        startDate:
-          date.toLocaleDateString("id-ID"),
-        endDate:
-          endDate.toLocaleDateString("id-ID"),
-        duration,
-        totalPrice,
-      },
-    });
-  };
+  // HARGA BERDASARKAN DURASI
+  const totalPrice =
+    quantity *
+    (selectedDuration === 12
+      ? bundle.harga_12_jam
+      : bundle.harga_24_jam);
+
+  // BOOKING
+  const handleBooking =
+    () => {
+      navigate(
+        "/checkout",
+        {
+          state: {
+            product: {
+              id_barang:
+                bundle.id,
+
+              nama_barang:
+                bundle.nama_barang,
+
+              deskripsi:
+                bundle.deskripsi,
+
+              gambar:
+                bundle.image,
+
+              isBundle:
+                true,
+            },
+
+            qty:
+              quantity,
+
+            selectedDate,
+
+            selectedDuration,
+
+            totalPrice,
+          },
+        }
+      );
+    };
 
   return (
     <div className="min-h-screen bg-[#DEDEDE] py-10 px-4">
-      <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-lg overflow-hidden">
 
-        <div className="grid md:grid-cols-2 gap-10 p-8">
+      <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-lg p-8">
 
-          <div className="flex justify-center items-center bg-white rounded-3xl p-6">
+        <div className="grid md:grid-cols-2 gap-10">
+
+          {/* IMAGE */}
+          <div className="flex items-center justify-center bg-white rounded-3xl p-6">
+
             <img
-              src={bundle.image}
-              alt={bundle.title}
+              src={
+                bundle.image
+              }
+              alt={
+                bundle.nama_barang
+              }
               className="max-h-[400px] max-w-full object-contain"
             />
+
           </div>
 
+          {/* DETAIL */}
           <div>
 
-            <h1 className="text-4xl font-bold mb-2">
-              {bundle.title}
+            <h1 className="text-4xl font-bold text-gray-800">
+              {
+                bundle.nama_barang
+              }
             </h1>
 
-            <p className="text-xl text-gray-600 mb-6">
-              {bundle.description}
+            <p className="text-gray-600 mt-2">
+              {
+                bundle.deskripsi
+              }
             </p>
 
-            <div className="space-y-2">
-              <p className="text-green-700 font-semibold">
-                12 Jam: Rp{" "}
-                {bundle.price12.toLocaleString(
-                  "id-ID"
-                )}
-              </p>
+            {/* DURASI */}
+            <div className="mt-6">
 
-              <p className="text-gray-700">
-                24 Jam: Rp{" "}
-                {bundle.price24.toLocaleString(
-                  "id-ID"
-                )}
-              </p>
+              <h2 className="font-bold text-lg mb-3">
+                Pilih Durasi Sewa
+              </h2>
+
+              <div className="flex gap-3">
+
+                {/* 12 JAM */}
+                <button
+                  onClick={() =>
+                    setSelectedDuration(
+                      12
+                    )
+                  }
+                  className={`flex-1 p-4 rounded-2xl border transition text-left ${
+                    selectedDuration ===
+                    12
+                      ? "bg-green-600 text-white border-green-600"
+                      : "bg-white border-gray-300"
+                  }`}
+                >
+                  <p className="font-bold text-lg">
+                    12 Jam
+                  </p>
+
+                  <p>
+                    Rp{" "}
+                    {bundle.harga_12_jam.toLocaleString(
+                      "id-ID"
+                    )}
+                  </p>
+                </button>
+
+                {/* 24 JAM */}
+                <button
+                  onClick={() =>
+                    setSelectedDuration(
+                      24
+                    )
+                  }
+                  className={`flex-1 p-4 rounded-2xl border transition text-left ${
+                    selectedDuration ===
+                    24
+                      ? "bg-green-600 text-white border-green-600"
+                      : "bg-white border-gray-300"
+                  }`}
+                >
+                  <p className="font-bold text-lg">
+                    24 Jam
+                  </p>
+
+                  <p>
+                    Rp{" "}
+                    {bundle.harga_24_jam.toLocaleString(
+                      "id-ID"
+                    )}
+                  </p>
+                </button>
+
+              </div>
+
             </div>
 
+            {/* SPESIFIKASI */}
             <div className="mt-8">
-              <h2 className="text-xl font-bold mb-4">
+
+              <h2 className="font-bold text-2xl mb-4">
                 Spesifikasi
               </h2>
 
-              <ul className="space-y-2">
-                {bundle.specifications.map(
-                  (item, index) => (
-                    <li key={index}>
-                      • {item}
-                    </li>
+              <div className="grid grid-cols-2 gap-2">
+
+                {Object.entries(
+                  bundle.spesifikasi
+                ).map(
+                  (
+                    [
+                      key,
+                      value,
+                    ]
+                  ) => (
+                    <div
+                      key={key}
+                      className="bg-[#DEDEDE] p-3 rounded-xl text-sm"
+                    >
+                      <p className="font-bold">
+                        {
+                          key
+                        }
+                      </p>
+
+                      <p>
+                        {
+                          value
+                        }
+                      </p>
+                    </div>
                   )
                 )}
-              </ul>
+
+              </div>
+
             </div>
 
+            {/* KALENDER */}
             <div className="mt-8">
-              <h2 className="text-xl font-bold mb-4">
+
+              <h2 className="font-bold text-xl mb-4">
                 Kalender Ketersediaan
               </h2>
 
-              <Calendar
-                onChange={setDate}
-                value={date}
-                tileClassName={tileClassName}
-                tileDisabled={tileDisabled}
-              />
+              <div className="border rounded-2xl p-4">
+
+                <Calendar
+                  onChange={
+                    setSelectedDate
+                  }
+                  value={
+                    selectedDate
+                  }
+                  tileClassName={
+                    tileClassName
+                  }
+                  tileDisabled={
+                    tileDisabled
+                  }
+                />
+
+              </div>
+
+              <p className="mt-4 font-semibold">
+                Tanggal dipilih:
+                {" "}
+                {selectedDate.toLocaleDateString(
+                  "id-ID"
+                )}
+              </p>
+
             </div>
 
-            <div className="mt-8 flex gap-4">
-              <button
-                onClick={() =>
-                  setDuration(12)
-                }
-                className={`px-6 py-2 rounded-xl ${
-                  duration === 12
-                    ? "bg-[#B2B2B2] text-white"
-                    : "bg-gray-200"
+            {/* STOCK */}
+            <div className="mt-6">
+              <h2 className="font-bold">
+                Ketersediaan:
+              </h2>
+
+              <p
+                className={`font-semibold ${
+                  bundle.stok ===
+                  0
+                    ? "text-red-500"
+                    : "text-green-600"
                 }`}
               >
-                12 Jam
-              </button>
-
-              <button
-                onClick={() =>
-                  setDuration(24)
-                }
-                className={`px-6 py-2 rounded-xl ${
-                  duration === 24
-                    ? "bg-[#B2B2B2] text-white"
-                    : "bg-gray-200"
-                }`}
-              >
-                24 Jam
-              </button>
+                {
+                  bundle.stok
+                }{" "}
+                tersedia
+              </p>
             </div>
 
-            <div className="mt-8 flex items-center gap-4">
-              <button
-                onClick={() =>
-                  setQuantity((q) =>
-                    Math.max(1, q - 1)
-                  )
-                }
-                className="bg-gray-300 px-4 py-2 rounded-lg"
-              >
-                -
-              </button>
+            {/* QUANTITY */}
+            <div className="mt-8">
 
-              <span className="text-2xl font-bold">
-                {quantity}
-              </span>
+              <h2 className="font-bold mb-3">
+                Quantity
+              </h2>
 
-              <button
-                onClick={() =>
-                  setQuantity((q) => q + 1)
-                }
-                className="bg-gray-300 px-4 py-2 rounded-lg"
-              >
-                +
-              </button>
+              <div className="flex items-center gap-4">
+
+                <button
+                  onClick={() =>
+                    setQuantity(
+                      quantity >
+                        1
+                        ? quantity -
+                            1
+                        : 1
+                    )
+                  }
+                  className="bg-[#B2B2B2] px-4 py-2 rounded-lg"
+                >
+                  -
+                </button>
+
+                <span className="font-bold text-xl">
+                  {
+                    quantity
+                  }
+                </span>
+
+                <button
+                  onClick={() =>
+                    setQuantity(
+                      quantity <
+                        bundle.stok
+                        ? quantity +
+                            1
+                        : quantity
+                    )
+                  }
+                  className="bg-[#B2B2B2] px-4 py-2 rounded-lg"
+                >
+                  +
+                </button>
+
+              </div>
+
             </div>
 
-            <div className="mt-8 bg-[#B2B2B2] text-white p-6 rounded-2xl">
-              <p>Total Harga</p>
+            {/* TOTAL */}
+            <div className="mt-8">
 
-              <h2 className="text-3xl font-bold">
+              <h2 className="font-bold text-xl">
+                Total Harga
+              </h2>
+
+              <p className="text-3xl font-bold mt-2">
                 Rp{" "}
                 {totalPrice.toLocaleString(
                   "id-ID"
                 )}
-              </h2>
+              </p>
+
             </div>
 
+            {/* BUTTON */}
             <button
-              onClick={handleBooking}
-              className="w-full mt-8 bg-[#B2B2B2] hover:bg-[#8f8f8f] text-white py-4 rounded-2xl transition"
+              onClick={
+                handleBooking
+              }
+              disabled={
+                bundle.stok ===
+                  0 ||
+                quantity >
+                  bundle.stok
+              }
+              className={`mt-8 w-full py-4 rounded-2xl font-semibold transition ${
+                bundle.stok ===
+                0
+                  ? "bg-gray-400 text-white cursor-not-allowed"
+                  : "bg-[#B2B2B2] hover:bg-[#8f8f8f] text-white"
+              }`}
             >
-              Booking Sekarang
+              {bundle.stok ===
+              0
+                ? "Stok Habis"
+                : "Booking Sekarang"}
             </button>
 
           </div>
@@ -267,6 +475,7 @@ function BundlingDetail() {
         </div>
 
       </div>
+
     </div>
   );
 }
