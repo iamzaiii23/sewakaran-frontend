@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 /* USER */
 import Dashboard from "./pages/Dashboard";
@@ -17,7 +18,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 /* ADMIN LAYOUT */
 import AdminLayout from "./layouts/AdminLayout";
 
-/* ADMIN PAGES (PASTIKAN NAMA FILE SESUAI) */
+/* ADMIN PAGES */
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminBooking from "./pages/AdminBooking";
 import AdminPembayaran from "./pages/AdminPembayaran";
@@ -31,6 +32,7 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/about" element={<About />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
 
       {/* ================= USER PROTECTED ================= */}
       <Route
@@ -41,9 +43,6 @@ function App() {
           </ProtectedRoute>
         }
       />
-
-      <Route path="/product/:id" element={<ProductDetail />} />
-      <Route path="/bundling/:id" element={<BundlingDetail />} />
 
       <Route
         path="/checkout"
@@ -63,21 +62,27 @@ function App() {
         }
       />
 
+      {/* ================= PRODUCT ================= */}
+      <Route path="/product/:id" element={<ProductDetail />} />
+      <Route path="/bundling/:id" element={<BundlingDetail />} />
+
       {/* ================= ADMIN ================= */}
       <Route path="/admin" element={<AdminLayout />}>
-
-        {/* default /admin */}
         <Route index element={<AdminDashboard />} />
-
-        {/* sub pages */}
         <Route path="booking" element={<AdminBooking />} />
         <Route path="payment" element={<AdminPembayaran />} />
         <Route path="stock" element={<AdminStok />} />
-
       </Route>
 
       {/* ================= 404 ================= */}
-      <Route path="*" element={<div className="p-10 text-center text-2xl">404 Not Found</div>} />
+      <Route
+        path="*"
+        element={
+          <div className="p-10 text-center text-2xl">
+            404 Not Found
+          </div>
+        }
+      />
 
     </Routes>
   );

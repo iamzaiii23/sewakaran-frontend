@@ -14,7 +14,6 @@ function Login() {
 
   return (
     <div className="min-h-screen bg-[#DEDEDE] flex items-center justify-center p-4">
-
       <div className="w-full max-w-md bg-white rounded-[40px] shadow-xl overflow-hidden">
 
         {/* HEADER */}
@@ -38,12 +37,15 @@ function Login() {
               Login
             </button>
 
-            <button className="text-gray-400">
+            <Link
+              to="/register"
+              className="text-gray-400 hover:text-blue-500"
+            >
               Register
-            </button>
+            </Link>
           </div>
 
-          {/* INPUT (UI only) */}
+          {/* INPUT UI */}
           <input
             type="email"
             placeholder="Email Address"
@@ -68,19 +70,18 @@ function Login() {
             </span>
           </div>
 
-          {/* LOGIN BUTTON (Google Auth) */}
+          {/* LOGIN GOOGLE */}
           <button
             onClick={login}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition"
           >
-            Login with Google
+            Login
           </button>
 
-          {/* GOOGLE ICON LOGIN */}
+          {/* GOOGLE ICON */}
           <div className="mt-8 text-center">
-
             <p className="text-gray-500 mb-4">
-              or connect with
+              atau masuk menggunakan
             </p>
 
             <button
@@ -93,13 +94,11 @@ function Login() {
                 className="w-8 h-8"
               />
             </button>
-
           </div>
 
           {/* USER INFO */}
           {user && (
             <div className="mt-8 text-center">
-
               <img
                 src={user.photoURL}
                 alt={user.displayName}
@@ -120,27 +119,22 @@ function Login() {
               >
                 Masuk Dashboard
               </Link>
-
             </div>
           )}
-
         </div>
 
         {/* FOOTER */}
         <div className="bg-[#A0A0A0] p-6">
           <div className="bg-white rounded-full w-64 h-32 mx-auto flex items-center justify-center">
-
             <img
               src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
               alt="Illustration"
               className="h-24"
             />
-
           </div>
         </div>
 
       </div>
-
     </div>
   );
 }
