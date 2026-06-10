@@ -9,9 +9,9 @@ import heroImage from "../assets/logo-sewakaran.jpeg";
 
 import handieTalkie from "../assets/handie-talkie.jpeg";
 import soundSystem from "../assets/sound-system.jpeg";
-import tripod from "../assets/tripod.jpeg";
-import stand from "../assets/stand.jpeg";
-import mic from "../assets/mic.jpeg";
+import tripod from "../assets/Tripod.jpeg";
+import stand from "../assets/Stand.jpeg";
+import mic from "../assets/Mic.jpeg";
 import earphone from "../assets/earphone-ht.jpeg";
 import chargerSystem from "../assets/charger-system.jpeg";
 
@@ -105,7 +105,6 @@ function Home() {
     <div className="bg-[#DEDEDE] min-h-screen">
       <Navbar />
 
-      {/* HERO */}
       <section className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
         <div className="bg-white rounded-3xl shadow-lg p-6 md:p-12">
           <div className="grid md:grid-cols-2 gap-8 items-center">
@@ -132,7 +131,6 @@ function Home() {
         </div>
       </section>
 
-      {/* TAB */}
       <section className="max-w-7xl mx-auto px-4 md:px-6 pb-8">
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button
@@ -159,7 +157,6 @@ function Home() {
         </div>
       </section>
 
-      {/* PRODUK */}
       {activeTab === "barang" && (
         <section className="max-w-7xl mx-auto px-4 md:px-6 pb-20">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
@@ -173,7 +170,6 @@ function Home() {
         </section>
       )}
 
-      {/* BUNDLING */}
       {activeTab === "bundling" && (
         <section className="max-w-7xl mx-auto px-4 md:px-6 pb-20">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">

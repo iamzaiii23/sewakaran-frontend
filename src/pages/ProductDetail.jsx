@@ -5,9 +5,9 @@ import "react-calendar/dist/Calendar.css";
 
 import handieTalkie from "../assets/handie-talkie.jpeg";
 import soundSystem from "../assets/sound-system.jpeg";
-import tripod from "../assets/tripod.jpeg";
-import stand from "../assets/stand.jpeg";
-import mic from "../assets/mic.jpeg";
+import tripod from "../assets/Tripod.jpeg";
+import stand from "../assets/Stand.jpeg";
+import mic from "../assets/Mic.jpeg";
 import earphone from "../assets/earphone-ht.jpeg";
 import chargerSystem from "../assets/charger-system.jpeg";
 
